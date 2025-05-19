@@ -32,7 +32,11 @@ public class SpotifyController {
 
     private final String authorizeUrl = "https://accounts.spotify.com/authorize";
     private final String tokenUrl = "https://accounts.spotify.com/api/token";
-
+    @GetMapping("/")
+    public String homePage() {
+        return "index";
+        }
+        
     @GetMapping("/login")
     public void login(HttpServletResponse response) throws IOException {
         String url = UriComponentsBuilder.fromHttpUrl(authorizeUrl)
