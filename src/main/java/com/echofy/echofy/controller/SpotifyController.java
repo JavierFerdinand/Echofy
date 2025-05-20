@@ -47,6 +47,7 @@ public class SpotifyController {
                 .queryParam("response_type", "code")
                 .queryParam("redirect_uri", redirectUri)
                 .queryParam("scope", "user-read-private user-read-email")
+                .queryParam("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative")
                 .build().toUriString();
 
         response.sendRedirect(url);
@@ -79,7 +80,7 @@ public class SpotifyController {
     return "redirect:/?error";
     }
 
-    @GetMapping("/dashboard")
+   @GetMapping("/dashboard")
 public String dashboard(HttpSession session, Model model) {
     String token = (String) session.getAttribute("access_token");
 
@@ -87,9 +88,40 @@ public String dashboard(HttpSession session, Model model) {
         return "redirect:/login";
     }
 
-    model.addAttribute("token", token); // Opsional, bisa ditampilkan di HTML
-    return "dashboard"; // Buat file dashboard.html di templates
+    RestTemplate restTemplate = new RestTemplate();
+
+    // Header dengan Bearer token
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+    HttpEntity<String> entity = new HttpEntity<>(headers);
+
+    // Ambil profil user
+    ResponseEntity<Map> userResponse = restTemplate.exchange(
+        "https://api.spotify.com/v1/me",
+        HttpMethod.GET,
+        entity,
+        Map.class
+    );
+    model.addAttribute("user", userResponse.getBody());
+
+    // Ambil playlist user
+    ResponseEntity<Map> playlistResponse = restTemplate.exchange(
+        "https://api.spotify.com/v1/me/playlists",
+        HttpMethod.GET,
+        entity,
+        Map.class
+    );
+
+    // Ambil array dari "items" (playlist list)
+    Map<String, Object> playlistBody = playlistResponse.getBody();
+    if (playlistBody != null) {
+        model.addAttribute("playlists", playlistBody.get("items"));
+    }
+
+    return "dashboard";
 }
+
+
 
 
 }
