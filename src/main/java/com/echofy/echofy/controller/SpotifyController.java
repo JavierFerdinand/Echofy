@@ -7,16 +7,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class SpotifyController {
@@ -49,29 +52,45 @@ public class SpotifyController {
         response.sendRedirect(url);
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<String> callback(@RequestParam("code") String code) {
+   @GetMapping("/callback")
+    public String callback(@RequestParam("code") String code, HttpSession session) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(clientId, clientSecret);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    headers.setBasicAuth(clientId, clientSecret);
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        String body = "grant_type=authorization_code&code=" + code + "&redirect_uri=" + redirectUri;
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.add("grant_type", "authorization_code");
+    params.add("code", code);
+    params.add("redirect_uri", redirectUri);
 
-        HttpEntity<String> request = new HttpEntity<>(body, headers);
+    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
-        ResponseEntity<Map> response = restTemplate.exchange(
-                tokenUrl,
-                HttpMethod.POST,
-                request,
-                Map.class);
+    ResponseEntity<Map> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, Map.class);
+    Map<String, Object> responseBody = response.getBody();
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            Map<String, Object> tokenResponse = response.getBody();
-            return ResponseEntity.ok("Access Token: " + tokenResponse.get("access_token"));
-        } else {
-            return ResponseEntity.status(response.getStatusCode()).body("Error retrieving token");
-        }
+    if (responseBody != null && responseBody.get("access_token") != null) {
+        String accessToken = (String) responseBody.get("access_token");
+        session.setAttribute("access_token", accessToken);
+        return "redirect:/dashboard";
     }
+
+    return "redirect:/?error";
+    }
+
+    @GetMapping("/dashboard")
+public String dashboard(HttpSession session, Model model) {
+    String token = (String) session.getAttribute("access_token");
+
+    if (token == null) {
+        return "redirect:/login";
+    }
+
+    model.addAttribute("token", token); // Opsional, bisa ditampilkan di HTML
+    return "dashboard"; // Buat file dashboard.html di templates
 }
+
+
+}
+ 
