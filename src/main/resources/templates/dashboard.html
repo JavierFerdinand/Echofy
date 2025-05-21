@@ -2,55 +2,79 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>Echofy Dashboard</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <title>Spotify Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1c1c1c;
+            height: 100vh;
+            padding: 1rem;
+        }
+        .playlist-img, .avatar-img {
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .playlist-item:hover {
+            background-color: #2a2a2a;
+            cursor: pointer;
+        }
+        .main-content {
+            padding: 2rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+    </style>
 </head>
-<body class="bg-black text-white font-sans">
-    <div class="p-6">
-        <!-- Header -->
-        <header class="flex items-center justify-between mb-6">
-            <div class="flex items-center space-x-4">
-                <img th:if="${user.images != null and !user.images.isEmpty()}" 
-                     th:src="${user.images[0].url}" 
-                     alt="Profile Image" 
-                     class="w-12 h-12 rounded-full" />
-                <h1 class="text-2xl font-bold">Hello, <span th:text="${user.display_name}">User</span>!</h1>
-            </div>
-            <a href="/logout" class="text-red-400 hover:text-red-600">Logout</a>
-        </header>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar text-white">
+            <h5 class="mb-4">Your Library</h5>
+            <h6 class="text-muted">Playlists</h6>
+            <ul class="list-unstyled">
+                <li th:each="p : ${playlists}" class="d-flex align-items-center gap-2 py-2 playlist-item rounded">
+                    <img th:if="${p.images != null and !p.images.isEmpty()}" 
+                         th:src="${p.images[0].url}" 
+                         class="playlist-img" style="width: 40px; height: 40px;" />
+                    <span th:text="${p.name}" class="text-truncate"></span>
+                </li>
+            </ul>
+        </div>
 
-        <!-- Playlist Section -->
-        <section class="mb-8">
-            <h2 class="text-xl font-semibold mb-4">Your Playlists</h2>
-
-            <!-- Jika playlist kosong -->
-            <div th:if="${#lists.isEmpty(playlists)}" class="text-zinc-400 text-center mt-8">
-                You don't have any playlists yet.
-            </div>
-
-            <!-- Jika playlist ada -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" th:if="${!#lists.isEmpty(playlists)}">
-                <div th:each="playlist : ${playlists}" class="bg-zinc-800 p-4 rounded-lg shadow hover:bg-zinc-700 transition">
-                    <a th:href="${playlist.external_urls.spotify}" target="_blank" class="block">
-                        <!-- Gambar Playlist -->
-                        <img th:if="${playlist.images != null and !playlist.images.isEmpty()}" 
-                             th:src="${playlist.images[0].url}" 
-                             alt="Playlist Cover" 
-                             class="w-full h-40 object-cover rounded mb-2" />
-                        <div th:unless="${playlist.images != null and !playlist.images.isEmpty()}"
-                             class="w-full h-40 bg-zinc-700 flex items-center justify-center rounded mb-2 text-sm text-gray-300">
-                            No Image
-                        </div>
-
-                        <!-- Nama Playlist -->
-                        <h3 class="text-lg font-medium" th:text="${playlist.name}">Playlist Name</h3>
-                        
-                        <!-- Jumlah Track -->
-                        <p class="text-sm text-zinc-400" th:text="${playlist.tracks.total + ' tracks'}"></p>
-                    </a>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <input type="text" class="form-control w-25 bg-dark text-white border-0" placeholder="Search...">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-white fw-bold" th:text="${user.display_name}">User</span>
+                    <img th:if="${user.images != null and !user.images.isEmpty()}" 
+                         th:src="${user.images[0].url}" 
+                         class="avatar-img" style="width: 40px; height: 40px; border-radius: 50%;">
+                    <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
                 </div>
             </div>
-        </section>
+
+            <h4 class="mb-4">To get you started</h4>
+            <div class="row g-4">
+                <div class="col-6 col-md-4 col-lg-3" th:each="playlist : ${playlists}">
+                    <div class="bg-dark rounded p-2 h-100 text-white playlist-item">
+                        <img th:if="${playlist.images != null and !playlist.images.isEmpty()}"
+                             th:src="${playlist.images[0].url}" 
+                             class="w-100 playlist-img mb-2" style="height: 150px;" />
+                        <h6 th:text="${playlist.name}" class="fw-semibold text-truncate"></h6>
+                        <p th:text="${playlist.tracks.total + ' tracks'}" class="text-muted small mb-0"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
