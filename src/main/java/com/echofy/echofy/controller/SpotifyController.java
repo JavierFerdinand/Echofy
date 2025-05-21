@@ -120,6 +120,43 @@ public String dashboard(HttpSession session, Model model) {
 
     return "dashboard";
 }
+    @GetMapping("/search")
+public String search(@RequestParam("query") String query, HttpSession session, Model model) {
+    String token = (String) session.getAttribute("access_token");
+
+    if (token == null) {
+        return "redirect:/login";
+    }
+
+    RestTemplate restTemplate = new RestTemplate();
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+    HttpEntity<String> entity = new HttpEntity<>(headers);
+
+    String searchUrl = UriComponentsBuilder
+            .fromHttpUrl("https://api.spotify.com/v1/search")
+            .queryParam("q", query)
+            .queryParam("type", "track")
+            .queryParam("limit", 10)
+            .build()
+            .toUriString();
+
+    ResponseEntity<Map> searchResponse = restTemplate.exchange(
+        searchUrl, HttpMethod.GET, entity, Map.class
+    );
+
+    Map<String, Object> responseBody = searchResponse.getBody();
+    if (responseBody != null && responseBody.containsKey("tracks")) {
+        Map<String, Object> tracks = (Map<String, Object>) responseBody.get("tracks");
+        model.addAttribute("tracks", tracks.get("items"));
+    }
+
+    // Reuse dashboard elements (playlist, user) if needed
+    model.addAttribute("searchQuery", query);
+
+    return "dashboard";
+}
 
 
 

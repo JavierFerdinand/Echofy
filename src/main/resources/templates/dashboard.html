@@ -1,80 +1,106 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8" />
     <title>Spotify Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/jpg" href="/img/logo.jpg" />
     <style>
         body {
             background-color: #121212;
             color: white;
+            overflow-x: hidden;
         }
         .sidebar {
-            width: 250px;
-            background-color: #1c1c1c;
+            width: 240px;
+            background-color: #000000;
             height: 100vh;
             padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
         }
         .playlist-img, .avatar-img {
             border-radius: 8px;
             object-fit: cover;
         }
         .playlist-item:hover {
-            background-color: #2a2a2a;
+            background-color: #282828;
             cursor: pointer;
         }
         .main-content {
+            margin-left: 240px;
             padding: 2rem;
-            flex: 1;
-            overflow-y: auto;
+            min-height: 100vh;
+        }
+        .navbar-spotify {
+            background-color: #121212;
+            border-bottom: 1px solid #282828;
+        }
+        .search-input {
+            background-color: #282828;
+            border: none;
+            color: white;
+        }
+        .search-input::placeholder {
+            color: #b3b3b3;
         }
     </style>
 </head>
 <body>
-    <div class="d-flex">
-        <!-- Sidebar -->
-        <div class="sidebar text-white">
-            <h5 class="mb-4">Your Library</h5>
-            <h6 class="text-muted">Playlists</h6>
-            <ul class="list-unstyled">
-                <li th:each="p : ${playlists}" class="d-flex align-items-center gap-2 py-2 playlist-item rounded">
-                    <img th:if="${p.images != null and !p.images.isEmpty()}" 
-                         th:src="${p.images[0].url}" 
-                         class="playlist-img" style="width: 40px; height: 40px;" />
-                    <span th:text="${p.name}" class="text-truncate"></span>
-                </li>
-            </ul>
-        </div>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <input type="text" class="form-control w-25 bg-dark text-white border-0" placeholder="Search...">
-                <div class="d-flex align-items-center gap-3">
-                    <span class="text-white fw-bold" th:text="${user.display_name}">User</span>
-                    <img th:if="${user.images != null and !user.images.isEmpty()}" 
-                         th:src="${user.images[0].url}" 
-                         class="avatar-img" style="width: 40px; height: 40px; border-radius: 50%;">
-                    <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
+<!-- Navbar -->
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar text-white">
+        <h5 class="mb-4">Your Library</h5>
+        <h6 class="text-muted">Playlists</h6>
+        <ul class="list-unstyled">
+            <li th:each="p : ${playlists}" class="d-flex align-items-center gap-2 py-2 playlist-item rounded">
+                <img th:if="${p.images != null and !p.images.isEmpty()}" 
+                     th:src="${p.images[0].url}" 
+                     class="playlist-img" style="width: 40px; height: 40px;" />
+                <span th:text="${p.name}" class="text-truncate"></span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content w-100">
+        <h4 class="mb-4">To get you started</h4>
+        <div class="row g-4">
+            <div class="col-6 col-md-4 col-lg-3" th:each="playlist : ${playlists}">
+                <div class="bg-dark rounded p-2 h-100 text-white playlist-item">
+                    <img th:if="${playlist.images != null and !playlist.images.isEmpty()}"
+                         th:src="${playlist.images[0].url}" 
+                         class="w-100 playlist-img mb-2" style="height: 150px;" />
+                    <h6 th:text="${playlist.name}" class="fw-semibold text-truncate"></h6>
+                    <p th:text="${playlist.tracks.total + ' tracks'}" class="text-muted small mb-0"></p>
                 </div>
             </div>
+        </div>
 
-            <h4 class="mb-4">To get you started</h4>
+        <!-- Search Results -->
+        <div th:if="${tracks != null}" class="mt-5">
+            <h4 class="mb-3">Search Results for "<span th:text="${searchQuery}"></span>"</h4>
             <div class="row g-4">
-                <div class="col-6 col-md-4 col-lg-3" th:each="playlist : ${playlists}">
-                    <div class="bg-dark rounded p-2 h-100 text-white playlist-item">
-                        <img th:if="${playlist.images != null and !playlist.images.isEmpty()}"
-                             th:src="${playlist.images[0].url}" 
+                <div class="col-6 col-md-4 col-lg-3" th:each="track : ${tracks}">
+                    <div class="bg-dark rounded p-2 h-100 text-white">
+                        <img th:if="${track.album.images != null and !track.album.images.isEmpty()}" 
+                             th:src="${track.album.images[0].url}" 
                              class="w-100 playlist-img mb-2" style="height: 150px;" />
-                        <h6 th:text="${playlist.name}" class="fw-semibold text-truncate"></h6>
-                        <p th:text="${playlist.tracks.total + ' tracks'}" class="text-muted small mb-0"></p>
+                        <h6 th:text="${track.name}" class="fw-semibold text-truncate"></h6>
+                        <p th:text="${track.artists[0].name}" class="text-muted small mb-0"></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
