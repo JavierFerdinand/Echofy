@@ -1,35 +1,98 @@
 <!-- templates/fragments/navbar.html -->
 <nav th:fragment="navbar" class="navbar navbar-dark bg-black px-3 py-2 shadow-sm" style="position: sticky; top: 0; z-index: 1000;">
-    <div class="container-fluid d-flex align-items-center justify-content-between">
-        
-        <!-- Kiri: Logo dan Home -->
-        <div class="d-flex align-items-center">
-            <a href="/" class="me-3">
-                <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/04/Spotify_Logo_CMYK_White.png" alt="Logo" width="32" height="32" />
-            </a>
-            <a href="/" class="btn btn-dark rounded-circle me-3">
-                <i class="bi bi-house-door-fill fs-5 text-white"></i>
-            </a>
-        </div>
+  <div class="container-fluid d-flex align-items-center justify-content-between">
 
-        <!-- Tengah: Search -->
-        <form class="d-flex flex-grow-1 mx-3" action="/search" method="get" style="max-width: 600px;">
-            <div class="input-group">
-                <span class="input-group-text bg-dark border-0 text-white rounded-start-pill">
-                    <i class="bi bi-search"></i>
-                </span>
-                <input type="search" class="form-control bg-dark text-white border-0 rounded-end-pill" 
-                       placeholder="What do you want to play?" name="query" />
-            </div>
-        </form>
-
-        <!-- Kanan: Notifikasi, Teman, Profil -->
-        <div class="d-flex align-items-center gap-3">
-            <a href="#" class="text-white"><i class="bi bi-bell fs-5"></i></a>
-            <a href="#" class="text-white"><i class="bi bi-people fs-5"></i></a>
-            <div class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                <span th:text="${user.display_name.substring(0,1)}">J</span>
-            </div>
-        </div>
+    <!-- Kiri: Logo dan Home -->
+    <div class="d-flex align-items-center">
+      <a href="/" class="me-3">
+        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/04/Spotify_Logo_CMYK_White.png" alt="Logo" width="32" height="32" />
+      </a>
+      <a href="/" class="btn btn-dark rounded-circle me-3" aria-label="Home">
+        <i class="bi bi-house-door-fill fs-5 text-white"></i>
+      </a>
     </div>
+
+    <!-- Tengah: Search -->
+    <form
+      class="d-flex flex-grow-1 mx-3 position-relative"
+      action="/search"
+      method="get"
+      style="max-width: 600px;"
+      role="search"
+      aria-label="Site Search"
+    >
+      <input
+        type="search"
+        class="form-control search-input"
+        placeholder="What do you want to play?"
+        name="query"
+        aria-label="Search music, artists, playlists"
+        required
+      />
+      <button type="submit" class="btn search-btn" aria-label="Search">
+        <i class="bi bi-search"></i>
+      </button>
+    </form>
+
+    <!-- Kanan: Notifikasi, Teman, Profil -->
+    <div class="d-flex align-items-center gap-3">
+      <a href="#" class="text-white" aria-label="Notifications"><i class="bi bi-bell fs-5"></i></a>
+      <a href="#" class="text-white" aria-label="Friends"><i class="bi bi-people fs-5"></i></a>
+      <div
+        class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
+        style="width: 32px; height: 32px;"
+        aria-label="User profile initial"
+      >
+        <span th:text="${user.display_name.substring(0,1)}">J</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom CSS for Search -->
+  <style>
+    .search-input {
+  width: 100%;
+  padding: 10px 45px 10px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgb(72, 70, 70);      /* border putih */
+  background-color: #282828;
+  color: #e0e0e0;                /* tulisan agak abu-abu terang */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: #bbbbbb;               /* placeholder abu-abu terang */
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 8px 2px #ffffff;
+  border-color: #f9f9f9;        /* border hijau saat fokus */
+  background-color: #121212;
+  color: white;                 /* tulisan jadi putih penuh saat fokus */
+}
+
+    .search-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #1db954;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+
+    .search-btn:hover {
+      background-color: #1ed760;
+    }
+  </style>
 </nav>
