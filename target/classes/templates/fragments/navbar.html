@@ -1,63 +1,17 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Navbar Fragment</title>
-    <style>
-        .navbar-spotify {
-            background-color: #121212;
-            border-bottom: 1px solid #282828;
-            height: 60px;
-        }
-        .navbar-spotify a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.25rem;
-        }
-        .navbar-spotify a:hover {
-            color: #1db954;
-        }
-        .navbar-spotify .nav-item {
-            margin-left: 1rem;
-            margin-right: 1rem;
-        }
-        .navbar-spotify .search-input {
-            width: 250px;
-            background-color: #282828;
-            border: none;
-            color: white;
-            border-radius: 4px;
-            padding: 5px 10px;
-        }
-        .navbar-spotify .search-input::placeholder {
-            color: #b3b3b3;
-        }
-    </style>
-</head>
-<body>
-<div th:fragment="navbar">
-    <nav class="navbar navbar-spotify d-flex align-items-center px-4">
-        <a href="/" class="navbar-brand">Spotify</a>
-        <ul class="nav d-flex align-items-center mb-0">
-            <li class="nav-item"><a href="/dashboard">Home</a></li>
-            <li class="nav-item"><a href="/dashboard#playlists">Playlists</a></li>
-            <li class="nav-item"><a href="/dashboard#search">Search</a></li>
-            <!-- Bisa tambah menu lain -->
-        </ul>
+<nav class="navbar navbar-dark bg-black fixed-top px-3 py-2" th:fragment="navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold fs-4" href="/">Echofy</a>
 
-        <form action="/search" method="get" class="ms-auto d-flex align-items-center">
-            <input type="text" name="query" class="search-input" placeholder="Search for songs, artists..." />
+        <form class="d-flex w-50" action="/search" method="get">
+            <input class="form-control bg-dark text-white border-0 rounded-pill px-3" 
+                   type="search" placeholder="Search for songs, artists, or playlists..." 
+                   name="query" aria-label="Search">
         </form>
 
-        <div class="d-flex align-items-center ms-3 gap-3">
-            <span th:text="${user.display_name}" style="white-space: nowrap;">User</span>
-            <img th:if="${user.images != null and !user.images.isEmpty()}" 
-                 th:src="${user.images[0].url}" 
-                 style="width: 40px; height: 40px; border-radius: 50%;" alt="Avatar"/>
-            <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
+        <div class="d-flex align-items-center">
+            <span class="me-2" th:text="${user.display_name}"></span>
+            <!-- <img th:if="${user.images}" th:src="${user.images[0].url}" 
+                 alt="Profile" class="rounded-circle" width="30" height="30"> -->
         </div>
+    </div>
     </nav>
-</div>
-</body>
-</html>

@@ -1,0 +1,45 @@
+<!-- templates/fragments/sidebar.html -->
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-black text-white sidebar" style="width: 300px;" th:fragment="sidebar">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fs-5 mb-0">Your Library</h2>
+        <button class="btn btn-link text-secondary p-0" data-bs-toggle="tooltip" title="Create playlist">
+            <span class="fs-4">+</span>
+        </button>
+    </div>
+
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
+                <span>🏠</span>
+                <span>Home</span>
+            </a>
+        </li>
+        <li>
+            <a href="#" class="nav-link text-secondary d-flex align-items-center gap-2">
+                <span>🔍</span>
+                <span>Search</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="bg-gradient rounded p-3 mb-3" style="background: linear-gradient(135deg, #450af5, #c4efd9);">
+        <h3 class="fs-6 mb-0">Liked Songs</h3>
+        <p class="small mb-0" th:text="${likedSongsCount} + ' songs'"></p>
+    </div>
+
+    <div class="mb-4">
+        <h3 class="text-uppercase small text-secondary mb-2">Playlists</h3>
+        <div th:each="playlist : ${playlists}" class="d-flex align-items-center gap-2 py-1">
+            <span>🎵</span>
+            <a href="#" class="text-decoration-none text-secondary small" th:text="${playlist.name}"></a>
+        </div>
+    </div>
+
+    <div>
+        <h3 class="text-uppercase small text-secondary mb-2">Artists</h3>
+        <div th:each="artist : ${topArtists}" class="d-flex align-items-center gap-2 py-1">
+            <span>🎤</span>
+            <a href="#" class="text-decoration-none text-secondary small" th:text="${artist.name}"></a>
+        </div>
+    </div>
+</div>
