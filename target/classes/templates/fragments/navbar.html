@@ -1,17 +1,35 @@
-<nav class="navbar navbar-dark bg-black fixed-top px-3 py-2" th:fragment="navbar">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold fs-4" href="/">Echofy</a>
+<!-- templates/fragments/navbar.html -->
+<nav th:fragment="navbar" class="navbar navbar-dark bg-black px-3 py-2 shadow-sm" style="position: sticky; top: 0; z-index: 1000;">
+    <div class="container-fluid d-flex align-items-center justify-content-between">
+        
+        <!-- Kiri: Logo dan Home -->
+        <div class="d-flex align-items-center">
+            <a href="/" class="me-3">
+                <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/04/Spotify_Logo_CMYK_White.png" alt="Logo" width="32" height="32" />
+            </a>
+            <a href="/" class="btn btn-dark rounded-circle me-3">
+                <i class="bi bi-house-door-fill fs-5 text-white"></i>
+            </a>
+        </div>
 
-        <form class="d-flex w-50" action="/search" method="get">
-            <input class="form-control bg-dark text-white border-0 rounded-pill px-3" 
-                   type="search" placeholder="Search for songs, artists, or playlists..." 
-                   name="query" aria-label="Search">
+        <!-- Tengah: Search -->
+        <form class="d-flex flex-grow-1 mx-3" action="/search" method="get" style="max-width: 600px;">
+            <div class="input-group">
+                <span class="input-group-text bg-dark border-0 text-white rounded-start-pill">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="search" class="form-control bg-dark text-white border-0 rounded-end-pill" 
+                       placeholder="What do you want to play?" name="query" />
+            </div>
         </form>
 
-        <div class="d-flex align-items-center">
-            <span class="me-2" th:text="${user.display_name}"></span>
-            <!-- <img th:if="${user.images}" th:src="${user.images[0].url}" 
-                 alt="Profile" class="rounded-circle" width="30" height="30"> -->
+        <!-- Kanan: Notifikasi, Teman, Profil -->
+        <div class="d-flex align-items-center gap-3">
+            <a href="#" class="text-white"><i class="bi bi-bell fs-5"></i></a>
+            <a href="#" class="text-white"><i class="bi bi-people fs-5"></i></a>
+            <div class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                <span th:text="${user.display_name.substring(0,1)}">J</span>
+            </div>
         </div>
     </div>
-    </nav>
+</nav>

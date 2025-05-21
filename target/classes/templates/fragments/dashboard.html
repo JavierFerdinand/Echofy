@@ -1,0 +1,49 @@
+<!-- templates/dashboard.html -->
+<div th:fragment="content">
+    <div class="container-fluid p-4">
+        <h1 class="display-6 mb-4">Welcome back, <span th:text="${user.display_name}"></span></h1>
+
+        <!-- Top Artists -->
+        <section class="mb-5">
+            <h2 class="h4 mb-3">Your Top Artists</h2>
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                <div class="col" th:each="artist : ${topArtists}">
+                    <div class="card bg-dark text-white h-100 border-0">
+                        <img th:if="${artist.images}" th:src="${artist.images[0].url}"
+                             class="card-img-top rounded" alt="Artist">
+                        <div class="card-body p-2">
+                            <h5 class="card-title text-truncate mb-1" th:text="${artist.name}"></h5>
+                            <p class="card-text text-secondary small mb-0">Artist</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recently Played -->
+        <section class="mb-5">
+            <h2 class="h4 mb-3">Recently Played</h2>
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                <!-- Recently played items would go here -->
+            </div>
+        </section>
+
+        <!-- Your Playlists -->
+        <section class="mb-5">
+            <h2 class="h4 mb-3">Your Playlists</h2>
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+                <div class="col" th:each="playlist : ${playlists}">
+                    <div class="card bg-dark text-white h-100 border-0">
+                        <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
+                             class="card-img-top rounded" alt="Playlist">
+                        <div class="card-body p-2">
+                            <h5 class="card-title text-truncate mb-1" th:text="${playlist.name}"></h5>
+                            <p class="card-text text-secondary small mb-0"
+                               th:text="${playlist.owner.display_name}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
