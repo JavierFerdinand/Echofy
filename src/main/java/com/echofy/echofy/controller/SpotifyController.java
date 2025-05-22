@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -21,8 +22,9 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class SpotifyController {
-
+    
     private final SpotifyService spotifyService;
+    
 
     public SpotifyController(SpotifyService spotifyService) {
         this.spotifyService = spotifyService;
@@ -133,6 +135,15 @@ public class SpotifyController {
         List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
         model.addAttribute("topTracks", topTracks);
         return "topTracks";
+    }
+     @ModelAttribute("playlists")
+    public List<Map<String, Object>> playlists(HttpSession session) {
+        String accessToken = (String) session.getAttribute("access_token");
+        if (accessToken == null) {
+            return List.of(); // kosong kalau belum login
+        }
+        Map<String, Object> playlists = spotifyService.getUserPlaylists(accessToken);
+        return (List<Map<String, Object>>) playlists.get("items");
     }
 
 }
