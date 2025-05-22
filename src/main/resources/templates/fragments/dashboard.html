@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Echofy Dashboard</title>
+  <style>
+   /* Sidebar agar tidak bergeser saat scroll */
+.fixed-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    background-color: #121212;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+/* Main content digeser ke kanan */
+.main-content {
+    margin-left: 250px;
+}
+
+
+   /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #121212;
+      color: #fff;
+    }
+
+    /* Layout */
+    .container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    aside.sidebar {
+      width: 240px;
+      background: #000000;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    aside.sidebar .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1db954;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+    aside.sidebar nav a {
+      display: block;
+      padding: 10px 12px;
+      color: #b3b3b3;
+      text-decoration: none;
+      margin-bottom: 8px;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    aside.sidebar nav a:hover,
+    aside.sidebar nav a.active {
+      background-color: #1db954;
+      color: #000;
+    }
+
+    /* Playlist scroll */
+    .playlist-list {
+      margin-top: 20px;
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+    .playlist-list div {
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #b3b3b3;
+      font-size: 14px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      transition: color 0.2s;
+    }
+    .playlist-list div:hover {
+      color: #fff;
+    }
+
+    /* Main content */
+    main.content {
+      flex-grow: 1;
+      background-color: #181818;
+      padding: 25px 30px;
+      overflow-y: auto;
+    }
+
+    main.content h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      user-select: none;
+    }
+
+    /* Grid playlists */
+    .playlists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(160px,1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .playlist-card {
+      background: #282828;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s;
+    }
+    .playlist-card:hover {
+      background: #1db954;
+      color: #000;
+    }
+    .playlist-image {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      background: #333;
+    }
+    .playlist-name {
+      padding: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Top Artists section */
+    .top-artists {
+      margin-top: 40px;
+    }
+    .top-artists h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .artist-list {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    .artist-card {
+      min-width: 120px;
+      background: #282828;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      padding: 10px;
+    }
+    .artist-card:hover {
+      background: #1db954;
+      color: #000;
+    }
+    .artist-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 10px auto;
+      background: #444;
+    }
+    .artist-name {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Scrollbar styling for playlist and artist list */
+    .playlist-list::-webkit-scrollbar,
+    .artist-list::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    .playlist-list::-webkit-scrollbar-thumb,
+    .artist-list::-webkit-scrollbar-thumb {
+      background-color: #1db954;
+      border-radius: 3px;
+    }
+    .playlist-list::-webkit-scrollbar-track,
+    .artist-list::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">Echofy</div>
+
+      <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#">Search</a>
+        <a href="#">Your Library</a>
+      </nav>
+
+      <div class="playlist-list" th:if="${playlists != null}">
+        <div th:each="playlist : ${playlists}"
+             th:text="${playlist.name}"
+             th:title="${playlist.description}"
+             class="playlist-item">
+          Playlist Name
+        </div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>Welcome, <span th:text="${user.display_name}">User</span>!</h1>
+
+      <section class="playlists-section">
+        <h2>Your Playlists</h2>
+        <div class="playlists-grid">
+          <div class="playlist-card" th:each="playlist : ${playlists}" th:key="${playlist.id}">
+            <img th:src="${#lists.isEmpty(playlist.images) ? '/images/playlist-default.png' : playlist.images[0].url}"
+                 alt="Playlist Image" class="playlist-image" />
+            <div class="playlist-name" th:text="${playlist.name}">Playlist Name</div>
+          </div>
+        </div>
+      </section>
+      <section class="top-tracks">
+  <h2>Your Top Tracks</h2>
+ 
+<<!-- Top Tracks -->
+<section class="mb-5">
+    <h2 class="h4 mb-3">Your Top Tracks</h2>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+        <div class="col" th:each="track : ${topTracks}">
+            <div class="card h-100">
+                <!-- Debug: Tampilkan seluruh object track -->
+                <div th:if="${track == null}" class="text-danger">
+                    NULL TRACK OBJECT
+                </div>
+                <img th:if="${track?.album?.images != null and !track.album.images.isEmpty()}" 
+                     th:src="${track.album.images[0].url}" 
+                     class="card-img-top rounded" 
+                     alt="Track cover">
+                <div th:unless="${track?.album?.images != null}" class="bg-secondary card-img-top rounded" style="height: 150px;">
+                    No Image
+                </div>
+                <div class="card-body p-2">
+                    <h5 class="card-title text-truncate mb-1" th:text="${track?.name} ?: 'Unknown'"></h5>
+                    <p class="card-text" th:text="${#strings.listJoin(track?.artists?.[*]?.![name], ', ')} ?: 'Unknown artist'"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+      <section class="top-artists">
+        <h2>Your Top Artists</h2>
+        <div class="artist-list">
+          <div class="artist-card" th:each="artist : ${topArtists}" th:key="${artist.id}">
+            <img th:src="${#lists.isEmpty(artist.images) ? '/images/artist-default.png' : artist.images[0].url}"
+                 alt="Artist Image" class="artist-image" />
+            <div class="artist-name" th:text="${artist.name}">Artist Name</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+</body>
+</html>

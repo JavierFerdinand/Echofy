@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to Echofy</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+    }
+
+    /* Background video */
+    #bg-video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      width: 300px;
+      z-index: 1;
+    }
+
+    .centered {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      margin-bottom: 40px;
+      font-size: 1.8em;
+    }
+
+    .spotify-btn {
+      background-color: #1DB954;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .spotify-btn:hover {
+      background-color: #17a74a;
+    }
+  </style>
+</head>
+<body>
+  <!-- Video Background -->
+  <video autoplay muted loop id="bg-video">
+    <source src="img/videoplayback.mp4" type="video/mp4" />
+    Your browser does not support HTML5 video.
+  </video>
+
+  <!-- Centered Content -->
+  <div class="centered">
+    <div class="container">
+      <h2>Welcome to Echofy</h2>
+      <button class="spotify-btn" onclick="window.location.href='/login'">
+        Login with Spotify
+      </button>
+    </div>
+  </div>
+</body>
+</html>

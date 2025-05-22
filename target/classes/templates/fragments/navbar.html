@@ -1,0 +1,125 @@
+
+<nav th:fragment="navbar" class="navbar navbar-dark bg-black px-3 py-2 shadow-sm" style="position: sticky; top: 0; z-index: 1000;">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
+
+    <div class="d-flex align-items-center">
+      <a href="dashboard" class="me-3">
+        <img src="img/logoweb.png" alt="Logo" width="50" height="50" />
+      </a>
+      <a href="dashboard" class="home-logo me-3" aria-label="Home">
+  <img src="img/logonavbar.png" alt="Logo" width="32" height="32" />
+</a>
+    </div>
+
+    
+    <form
+      class="d-flex flex-grow-1 mx-3 position-relative"
+      action="/search"
+      method="get"
+      style="max-width: 600px;"
+      role="search"
+      aria-label="Site Search"
+    >
+      <input
+        type="search"
+        class="form-control search-input"
+        placeholder="What do you want to play?"
+        name="query"
+        aria-label="Search music, artists, playlists"
+        required
+      />
+      <button type="submit" class="btn search-btn" aria-label="Search">
+       <img src="img/logosearch.png" alt="Search" style="width:20px; height:20px;">
+      </button>
+    </form>
+
+    <!-- Kanan: Notifikasi, Teman, Profil -->
+    <div class="d-flex align-items-center gap-3">
+      <a href="#" class="text-white" aria-label="Notifications"><i class="bi bi-bell fs-5"></i></a>
+      <a href="#" class="text-white" aria-label="Friends"><i class="bi bi-people fs-5"></i></a>
+      <div
+        class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
+        style="width: 32px; height: 32px;"
+        aria-label="User profile initial"
+      >
+        <span th:text="${user.display_name.substring(0,1)}">J</span>
+      </div>
+    </div>
+  </div>
+
+  <style>
+
+    .home-logo {
+  display: inline-block;
+  padding: 4px;
+  background-color: #282828;
+  border: 2px solid #282828;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.home-logo:hover {
+  border-color: #1db954;
+  background-color: rgba(29, 185, 84, 0.15);
+  text-decoration: none;
+}
+
+/* Supaya gambar search di button pas dan tidak melar */
+.search-btn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+    .search-input {
+  width: 100%;
+  padding: 10px 45px 10px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgb(72, 70, 70);      /* border putih */
+  background-color: #282828;
+  color: #e0e0e0;                /* tulisan agak abu-abu terang */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: #bbbbbb;               /* placeholder abu-abu terang */
+}
+.search-input:hover {
+  border-color: #c4cac6;
+  box-shadow: 0 0 6px 1.5px #adb2af;
+  color: white;
+}
+
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 8px 2px #ffffff;
+  border-color: #f9f9f9;        /* border hijau saat fokus */
+  background-color: #121212;
+  color: white;                 /* tulisan jadi putih penuh saat fokus */
+}
+
+    .search-btn {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #1db954;
+      border: none;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+
+    .search-btn:hover {
+      background-color: #1ed760;
+    }
+  </style>
+</nav>

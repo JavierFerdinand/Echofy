@@ -1,22 +1,20 @@
 package com.echofy.echofy.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.echofy.echofy.service.SpotifyService;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,105 +22,117 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class SpotifyController {
 
-    @Value("${spotify.clientId}")
-    private String clientId;
+    private final SpotifyService spotifyService;
 
-    @Value("${spotify.clientSecret}")
-    private String clientSecret;
+    public SpotifyController(SpotifyService spotifyService) {
+        this.spotifyService = spotifyService;
+    }
 
-    @Value("${spotify.redirectUri}")
-    private String redirectUri;
-
-    private final String authorizeUrl = "https://accounts.spotify.com/authorize";
-    private final String tokenUrl = "https://accounts.spotify.com/api/token";
     @GetMapping("/")
     public String homePage() {
         return "index";
-        }
-        
+    }
+
     @GetMapping("/login")
     public void login(HttpServletResponse response) throws IOException {
-        String url = UriComponentsBuilder.fromHttpUrl(authorizeUrl)
-                .queryParam("client_id", clientId)
-                .queryParam("response_type", "code")
-                .queryParam("redirect_uri", redirectUri)
-                .queryParam("scope", "user-read-private user-read-email")
-                .queryParam("scope", "user-read-private user-read-email playlist-read-private playlist-read-collaborative")
-                .build().toUriString();
-
+        String url = spotifyService.buildAuthorizeUrl();
         response.sendRedirect(url);
     }
 
-   @GetMapping("/callback")
+    @GetMapping("/callback")
     public String callback(@RequestParam("code") String code, HttpSession session) {
+        String accessToken = spotifyService.getAccessToken(code);
+        if (accessToken != null) {
+            session.setAttribute("access_token", accessToken);
+            return "redirect:/dashboard";
+        }
+        return "redirect:/?error";
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        String accessToken = (String) session.getAttribute("access_token");
+        if (accessToken == null) {
+            return "redirect:/login";
+        }
+
+        try {
+            Map<String, Object> user = spotifyService.getUserProfile(accessToken);
+            Map<String, Object> playlists = spotifyService.getUserPlaylists(accessToken);
+            List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
+            int likedSongsCount = spotifyService.getLikedSongsCount(accessToken);
+            Map<String, Object> newReleases = spotifyService.getNewReleases(accessToken);
+
+            Map<String, Object> albums = (Map<String, Object>) newReleases.get("albums");
+            List<Map<String, Object>> albumItems = (List<Map<String, Object>>) albums.get("items");
+
+            model.addAttribute("user", user);
+            model.addAttribute("playlists", playlists.get("items"));
+            model.addAttribute("likedSongsCount", likedSongsCount);
+            model.addAttribute("topTracks", topTracks);
+            model.addAttribute("token", accessToken); // Tambahkan 
+            model.addAttribute("newReleases", albumItems);
+           
+
+            return "dashboard";
+        } catch (Exception e) {
+            e.printStackTrace(); // ❗ Tampilkan detail error di console
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error"; // pastikan kamu punya error.html atau ganti sesuai halaman error-mu
+        }
+    }
+
+    @GetMapping("/token")
+    public String getToken(HttpSession session, Model model) {
+        String accessToken = (String) session.getAttribute("access_token");
+        System.out.println("Access Token di session: " + accessToken);
+        model.addAttribute("token", accessToken);
+        return "token";
+    }
+
+    @GetMapping("/search")
+    public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
+        String token = (String) session.getAttribute("access_token");
+
+        if (token == null) {
+            return "redirect:/login";
+        }
+
         RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
-    headers.setBasicAuth(clientId, clientSecret);
-    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setBearerAuth(token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.add("grant_type", "authorization_code");
-    params.add("code", code);
-    params.add("redirect_uri", redirectUri);
+        String url = UriComponentsBuilder
+                .fromHttpUrl("https://api.spotify.com/v1/search")
+                .queryParam("q", query)
+                .queryParam("type", "track")
+                .queryParam("limit", 10)
+                .build().toUriString();
 
-    HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        try {
+            Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
+            Map<String, Object> tracks = (Map<String, Object>) response.get("tracks");
 
-    ResponseEntity<Map> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, Map.class);
-    Map<String, Object> responseBody = response.getBody();
+            model.addAttribute("tracks", tracks.get("items"));
+            model.addAttribute("query", query);
 
-    if (responseBody != null && responseBody.get("access_token") != null) {
-        String accessToken = (String) responseBody.get("access_token");
-        session.setAttribute("access_token", accessToken);
-        return "redirect:/dashboard";
+            return "search-results";
+        } catch (Exception e) {
+            return "redirect:/?error=search";
+        }
     }
 
-    return "redirect:/?error";
+    @GetMapping("/top-tracks")
+    public String topTracks(HttpSession session, Model model) {
+        String accessToken = (String) session.getAttribute("access_token");
+        if (accessToken == null) {
+            return "redirect:/login";
+        }
+
+        List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
+        model.addAttribute("topTracks", topTracks);
+        return "topTracks";
     }
-
-   @GetMapping("/dashboard")
-public String dashboard(HttpSession session, Model model) {
-    String token = (String) session.getAttribute("access_token");
-
-    if (token == null) {
-        return "redirect:/login";
-    }
-
-    RestTemplate restTemplate = new RestTemplate();
-
-    // Header dengan Bearer token
-    HttpHeaders headers = new HttpHeaders();
-    headers.setBearerAuth(token);
-    HttpEntity<String> entity = new HttpEntity<>(headers);
-
-    // Ambil profil user
-    ResponseEntity<Map> userResponse = restTemplate.exchange(
-        "https://api.spotify.com/v1/me",
-        HttpMethod.GET,
-        entity,
-        Map.class
-    );
-    model.addAttribute("user", userResponse.getBody());
-
-    // Ambil playlist user
-    ResponseEntity<Map> playlistResponse = restTemplate.exchange(
-        "https://api.spotify.com/v1/me/playlists",
-        HttpMethod.GET,
-        entity,
-        Map.class
-    );
-
-    // Ambil array dari "items" (playlist list)
-    Map<String, Object> playlistBody = playlistResponse.getBody();
-    if (playlistBody != null) {
-        model.addAttribute("playlists", playlistBody.get("items"));
-    }
-
-    return "dashboard";
-}
-
-
-
 
 }
- 
