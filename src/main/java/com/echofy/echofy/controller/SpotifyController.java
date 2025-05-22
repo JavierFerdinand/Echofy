@@ -62,79 +62,77 @@ public class SpotifyController {
             List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
             int likedSongsCount = spotifyService.getLikedSongsCount(accessToken);
             Map<String, Object> newReleases = spotifyService.getNewReleases(accessToken);
-    model.addAttribute("newReleases", ((Map<String, Object>) newReleases.get("albums")).get("items"));
-            
+
+            Map<String, Object> albums = (Map<String, Object>) newReleases.get("albums");
+            List<Map<String, Object>> albumItems = (List<Map<String, Object>>) albums.get("items");
+
             model.addAttribute("user", user);
             model.addAttribute("playlists", playlists.get("items"));
             model.addAttribute("likedSongsCount", likedSongsCount);
             model.addAttribute("topTracks", topTracks);
             model.addAttribute("token", accessToken); // Tambahkan 
-            model.addAttribute("newReleases", newReleases.get("albums.items"));
-            System.out.println("Top Tracks Data: " + topTracks);
+            model.addAttribute("newReleases", albumItems);
+           
 
             return "dashboard";
         } catch (Exception e) {
-             e.printStackTrace(); // ❗ Tampilkan detail error di console
-        model.addAttribute("errorMessage", e.getMessage());
-        return "error"; // pastikan kamu punya error.html atau ganti sesuai halaman error-mu
+            e.printStackTrace(); // ❗ Tampilkan detail error di console
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error"; // pastikan kamu punya error.html atau ganti sesuai halaman error-mu
         }
     }
-    
+
     @GetMapping("/token")
-public String getToken(HttpSession session, Model model) {
-    String accessToken = (String) session.getAttribute("access_token");
-    System.out.println("Access Token di session: " + accessToken);
-    model.addAttribute("token", accessToken);
-    return "token";  
-}
+    public String getToken(HttpSession session, Model model) {
+        String accessToken = (String) session.getAttribute("access_token");
+        System.out.println("Access Token di session: " + accessToken);
+        model.addAttribute("token", accessToken);
+        return "token";
+    }
 
     @GetMapping("/search")
-public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
-    String token = (String) session.getAttribute("access_token");
+    public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
+        String token = (String) session.getAttribute("access_token");
 
-    if (token == null) {
-        return "redirect:/login";
-    }
+        if (token == null) {
+            return "redirect:/login";
+        }
 
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setBearerAuth(token);
-    HttpEntity<String> entity = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<String> entity = new HttpEntity<>(headers);
 
-    String url = UriComponentsBuilder
-        .fromHttpUrl("https://api.spotify.com/v1/search")
-        .queryParam("q", query)
-        .queryParam("type", "track")
-        .queryParam("limit", 10)
-        .build().toUriString();
+        String url = UriComponentsBuilder
+                .fromHttpUrl("https://api.spotify.com/v1/search")
+                .queryParam("q", query)
+                .queryParam("type", "track")
+                .queryParam("limit", 10)
+                .build().toUriString();
 
-    try {
-        Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
-        Map<String, Object> tracks = (Map<String, Object>) response.get("tracks");
+        try {
+            Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
+            Map<String, Object> tracks = (Map<String, Object>) response.get("tracks");
 
-        model.addAttribute("tracks", tracks.get("items"));
-        model.addAttribute("query", query);
+            model.addAttribute("tracks", tracks.get("items"));
+            model.addAttribute("query", query);
 
-        return "search-results";
-            } catch (Exception e) {
-        return "redirect:/?error=search";
+            return "search-results";
+        } catch (Exception e) {
+            return "redirect:/?error=search";
         }
     }
 
+    @GetMapping("/top-tracks")
+    public String topTracks(HttpSession session, Model model) {
+        String accessToken = (String) session.getAttribute("access_token");
+        if (accessToken == null) {
+            return "redirect:/login";
+        }
 
-     @GetMapping("/top-tracks")
-public String topTracks(HttpSession session, Model model) {
-    String accessToken = (String) session.getAttribute("access_token");
-    if (accessToken == null) {
-        return "redirect:/login";
+        List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
+        model.addAttribute("topTracks", topTracks);
+        return "topTracks";
     }
-
-    List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
-    model.addAttribute("topTracks", topTracks);
-    return "topTracks"; // halaman Thymeleaf untuk tampilkan track
-}
-
-
-    
 
 }

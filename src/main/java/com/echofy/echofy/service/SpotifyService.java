@@ -76,9 +76,26 @@ public class SpotifyService {
     }
 
     
-
+private Map<String, Object> makeSpotifyGetRequest(String url, String accessToken) {
+    RestTemplate restTemplate = new RestTemplate();
+    
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    
+    HttpEntity<String> entity = new HttpEntity<>(headers);
+    
+    return restTemplate.exchange(
+        url, 
+        HttpMethod.GET, 
+        entity, 
+        Map.class
+    ).getBody();
+}
    
-
+public Map<String, Object> getTopArtists(String accessToken) {
+    String url = "https://api.spotify.com/v1/me/top/artists?limit=10";
+    return makeSpotifyGetRequest(url, accessToken);
+}
     
 
     public int getLikedSongsCount(String accessToken) {
@@ -89,17 +106,6 @@ public class SpotifyService {
         }
 
         return 0;
-    }
-
-    private Map<String, Object> makeSpotifyGetRequest(String url, String accessToken) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        return restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
     }
 
     public List<Map<String, Object>> getTopTracks(String accessToken) {
@@ -120,7 +126,7 @@ public class SpotifyService {
         accessToken
     );
     
-}
+    }
 
 
 
