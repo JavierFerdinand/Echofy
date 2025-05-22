@@ -1,5 +1,6 @@
 <!-- fragments/sidebar.html -->
 
+<<<<<<< HEAD
 <div class="fixed-sidebar p-3">
 <div class="p-3 text-white bg-black">
   <h6 class="fw-bold mb-3">Your Library</h6>
@@ -54,3 +55,69 @@
     </ul>
 </div>
 </div>
+=======
+<div th:fragment="sidebar" class="fixed-sidebar p-3">
+  <div class="p-3 text-white bg-black">
+    <h6 class="fw-bold mb-3">Your Library</h6>
+
+    <!-- Tabs -->
+    <ul class="nav nav-pills mb-2" id="libraryTabs">
+      <li class="nav-item">
+        <button class="nav-link active btn-sm" data-bs-toggle="pill" data-bs-target="#playlists">Playlists</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link btn-sm" data-bs-toggle="pill" data-bs-target="#artists">Artists</button>
+      </li>
+    </ul>
+
+    <!-- Search -->
+    <input type="text" class="form-control form-control-sm bg-dark text-white border-0 mb-3" placeholder="Search Library">
+    <div class="sidebar-playlists">
+  <h3>Your Playlists</h3>
+  <ul>
+    <li th:each="playlist : ${playlists}">
+      <a th:href="@{/playlist/{id}(id=${playlist.id})}">
+        <img th:src="${playlist.images[0].url}" alt="Playlist Image" style="width: 40px; height: 40px; object-fit: cover;"/>
+        <span th:text="${playlist.name}"></span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+    <!-- Dynamic Content -->
+    <div class="tab-content text-white" style="max-height: 60vh; overflow-y: auto;">
+      <div class="tab-pane fade show active" id="playlists">
+        <div id="playlistContainer">Loading playlists...</div>
+      </div>
+      <div class="tab-pane fade" id="artists">
+        <div id="artistContainer">Loading artists...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-black text-white p-3 vh-100" style="width: 240px;">
+    <ul class="nav flex-column gap-3">
+      <li class="nav-item">
+        <a class="nav-link text-white d-flex align-items-center" href="/">
+          <i class="bi bi-house-door-fill me-2"></i> Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white d-flex align-items-center" href="/search">
+          <i class="bi bi-search me-2"></i> Search
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white d-flex align-items-center" href="/library">
+          <i class="bi bi-collection-play me-2"></i> Your Library
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white d-flex align-items-center" href="/liked">
+          <i class="bi bi-heart-fill me-2 text-danger"></i> Liked Songs
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+>>>>>>> e5493adde43f7f7d3f8d185fdcbcb1bbffac04bb
