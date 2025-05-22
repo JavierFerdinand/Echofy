@@ -18,14 +18,7 @@
     <input type="text" class="form-control form-control-sm bg-dark text-white border-0 mb-3" placeholder="Search Library">
     <div class="sidebar-playlists">
   <h3>Your Playlists</h3>
-  <ul>
-    <li th:each="playlist : ${playlists}">
-      <a th:href="@{/playlist/{id}(id=${playlist.id})}">
-        <img th:src="${playlist.images[0].url}" alt="Playlist Image" style="width: 40px; height: 40px; object-fit: cover;"/>
-        <span th:text="${playlist.name}"></span>
-      </a>
-    </li>
-  </ul>
+ 
 </div>
 
     <!-- Dynamic Content -->

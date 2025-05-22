@@ -22,13 +22,13 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class SpotifyController {
-    
+
     private final SpotifyService spotifyService;
-    
 
     public SpotifyController(SpotifyService spotifyService) {
         this.spotifyService = spotifyService;
     }
+
 
     @GetMapping("/")
     public String homePage() {
@@ -136,6 +136,7 @@ public class SpotifyController {
         model.addAttribute("topTracks", topTracks);
         return "topTracks";
     }
+
      @ModelAttribute("playlists")
     public List<Map<String, Object>> playlists(HttpSession session) {
         String accessToken = (String) session.getAttribute("access_token");
@@ -145,5 +146,6 @@ public class SpotifyController {
         Map<String, Object> playlists = spotifyService.getUserPlaylists(accessToken);
         return (List<Map<String, Object>>) playlists.get("items");
     }
+
 
 }
