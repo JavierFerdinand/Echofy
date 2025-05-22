@@ -246,7 +246,34 @@
           </div>
         </div>
       </section>
-
+      <section class="top-tracks">
+  <h2>Your Top Tracks</h2>
+ 
+<<!-- Top Tracks -->
+<section class="mb-5">
+    <h2 class="h4 mb-3">Your Top Tracks</h2>
+    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
+        <div class="col" th:each="track : ${topTracks}">
+            <div class="card h-100">
+                <!-- Debug: Tampilkan seluruh object track -->
+                <div th:if="${track == null}" class="text-danger">
+                    NULL TRACK OBJECT
+                </div>
+                <img th:if="${track?.album?.images != null and !track.album.images.isEmpty()}" 
+                     th:src="${track.album.images[0].url}" 
+                     class="card-img-top rounded" 
+                     alt="Track cover">
+                <div th:unless="${track?.album?.images != null}" class="bg-secondary card-img-top rounded" style="height: 150px;">
+                    No Image
+                </div>
+                <div class="card-body p-2">
+                    <h5 class="card-title text-truncate mb-1" th:text="${track?.name} ?: 'Unknown'"></h5>
+                    <p class="card-text" th:text="${#strings.listJoin(track?.artists?.[*]?.![name], ', ')} ?: 'Unknown artist'"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
       <section class="top-artists">
         <h2>Your Top Artists</h2>
         <div class="artist-list">
@@ -260,6 +287,7 @@
 
     </main>
   </div>
+
 
 </body>
 </html>

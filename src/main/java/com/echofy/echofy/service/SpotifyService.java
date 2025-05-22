@@ -34,13 +34,14 @@ public class SpotifyService {
                 .queryParam("client_id", clientId)
                 .queryParam("response_type", "code")
                 .queryParam("redirect_uri", redirectUri)
-                .queryParam("scope", String.join(" ",
-                        "user-read-private",
-                        "user-read-email",
-                        "playlist-read-private",
-                        "playlist-read-collaborative",
-                        "user-top-read",
-                        "user-library-read"))
+                .queryParam("scope", String.join(" ", 
+                    "user-read-private",
+                                "user-read-email",
+                                "playlist-read-private",
+                                "playlist-read-collaborative",
+                                "user-top-read",
+                                "user-library-read",
+                                "user-read-recently-played"))  
                 .build().toUriString();
     }
 
@@ -74,18 +75,11 @@ public class SpotifyService {
         return makeSpotifyGetRequest("https://api.spotify.com/v1/me/playlists?limit=50", accessToken);
     }
 
-    public Map<String, Object> getTopArtists(String accessToken) {
-        return makeSpotifyGetRequest("https://api.spotify.com/v1/me/top/artists?limit=10", accessToken);
-    }
+    
 
-    public Map<String, Object> getTopMixes(String accessToken) {
-        // Replace with an actual Spotify endpoint if needed
-        return makeSpotifyGetRequest("https://api.spotify.com/v1/me/top/tracks?limit=10", accessToken);
-    }
+   
 
-    public Map<String, Object> getRecommendedTracks(String accessToken) {
-        return makeSpotifyGetRequest("https://api.spotify.com/v1/recommendations?limit=10&seed_genres=pop", accessToken);
-    }
+    
 
     public int getLikedSongsCount(String accessToken) {
         Map<String, Object> savedTracks = makeSpotifyGetRequest("https://api.spotify.com/v1/me/tracks?limit=1", accessToken);
@@ -107,29 +101,27 @@ public class SpotifyService {
 
         return restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
     }
-//         public List<Map<String, Object>> getTopMixes(String accessToken) {
-//     String url = "https://api.spotify.com/v1/me/playlists?limit=6";
-//     HttpHeaders headers = new HttpHeaders();
-//     headers.setBearerAuth(accessToken);
-//     HttpEntity<String> entity = new HttpEntity<>(headers);
 
-//     RestTemplate restTemplate = new RestTemplate();
-//     Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
-
-//     return (List<Map<String, Object>>) response.get("items");
-// }
-
-    public List<Map<String, Object>> getRecommendations(String accessToken) {
-        String url = "https://api.spotify.com/v1/recommendations?limit=6&seed_genres=pop";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
+    public List<Map<String, Object>> getTopTracks(String accessToken) {
     RestTemplate restTemplate = new RestTemplate();
-    Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);  // Kirim token sebagai Bearer
+    HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        return (List<Map<String, Object>>) response.get("tracks");
-    }
+    String url = "https://api.spotify.com/v1/me/top/tracks?limit=10";
+
+    Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
+    List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+    return items;
+}
+    public Map<String, Object> getNewReleases(String accessToken) {
+    return makeSpotifyGetRequest(
+        "https://api.spotify.com/v1/browse/new-releases?limit=10&country=ID", 
+        accessToken
+    );
+    
+}
+
 
 
 }

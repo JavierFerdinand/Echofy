@@ -1,6 +1,7 @@
 package com.echofy.echofy.controller;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpEntity;
@@ -58,20 +59,35 @@ public class SpotifyController {
         try {
             Map<String, Object> user = spotifyService.getUserProfile(accessToken);
             Map<String, Object> playlists = spotifyService.getUserPlaylists(accessToken);
-            Map<String, Object> topArtists = spotifyService.getTopArtists(accessToken);
+            List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
             int likedSongsCount = spotifyService.getLikedSongsCount(accessToken);
-
+            Map<String, Object> newReleases = spotifyService.getNewReleases(accessToken);
+    model.addAttribute("newReleases", ((Map<String, Object>) newReleases.get("albums")).get("items"));
+            
             model.addAttribute("user", user);
             model.addAttribute("playlists", playlists.get("items"));
-            model.addAttribute("topArtists", topArtists.get("items"));
             model.addAttribute("likedSongsCount", likedSongsCount);
+            model.addAttribute("topTracks", topTracks);
+            model.addAttribute("token", accessToken); // Tambahkan 
+            model.addAttribute("newReleases", newReleases.get("albums.items"));
+            System.out.println("Top Tracks Data: " + topTracks);
 
             return "dashboard";
         } catch (Exception e) {
-            return "redirect:/?error=api";
+             e.printStackTrace(); // ❗ Tampilkan detail error di console
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error"; // pastikan kamu punya error.html atau ganti sesuai halaman error-mu
         }
     }
     
+    @GetMapping("/token")
+public String getToken(HttpSession session, Model model) {
+    String accessToken = (String) session.getAttribute("access_token");
+    System.out.println("Access Token di session: " + accessToken);
+    model.addAttribute("token", accessToken);
+    return "token";  
+}
+
     @GetMapping("/search")
 public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
     String token = (String) session.getAttribute("access_token");
@@ -100,9 +116,25 @@ public String searchTracks(@RequestParam("query") String query, HttpSession sess
         model.addAttribute("query", query);
 
         return "search-results";
-    } catch (Exception e) {
+            } catch (Exception e) {
         return "redirect:/?error=search";
+        }
     }
+
+
+     @GetMapping("/top-tracks")
+public String topTracks(HttpSession session, Model model) {
+    String accessToken = (String) session.getAttribute("access_token");
+    if (accessToken == null) {
+        return "redirect:/login";
+    }
+
+    List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
+    model.addAttribute("topTracks", topTracks);
+    return "topTracks"; // halaman Thymeleaf untuk tampilkan track
 }
+
+
+    
 
 }
