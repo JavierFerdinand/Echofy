@@ -108,6 +108,29 @@
             justify-content: center;
             font-size: 0.9rem;
         }
+        .text-truncate-2-lines {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Maksimal 2 baris */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+    .card-img-top {
+  height: 150px;
+  object-fit: cover;
+}
+.album-card .card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card-body {
+  flex: 1;
+  overflow: hidden;
+}
+
     </style>
 </head>
 
@@ -135,7 +158,7 @@
                                         <span class="text-muted">No Cover</span>
                                     </div>
                                     <div class="card-body text-center">
-                                        <h6 class="card-title mb-1" th:text="${album.name}">Album Name</h6>
+                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album Name</h6>
                                         <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
                                         <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
                                     </div>
@@ -153,7 +176,7 @@
                                     </div>
                                     <div class="card-body text-center">
                                         <h6 class="card-title mb-1" th:text="${album.name}">Album Name</h6>
-                                        <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
+                                        <p class="card-text text-muted mb-1 text-truncate" th:text="'By ' + ${album.artists[0].name}">Artist</p>
                                         <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
                                     </div>
                                 </div>
