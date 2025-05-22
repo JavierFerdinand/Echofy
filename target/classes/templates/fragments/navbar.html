@@ -3,12 +3,12 @@
   <div class="container-fluid d-flex align-items-center justify-content-between">
 
     <div class="d-flex align-items-center">
-      <a href="/" class="me-3">
-        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/04/Spotify_Logo_CMYK_White.png" alt="Logo" width="32" height="32" />
+      <a href="dashboard" class="me-3">
+        <img src="img/logoweb.png" alt="Logo" width="50" height="50" />
       </a>
-      <a href="/" class="btn btn-dark rounded-circle me-3" aria-label="Home">
-        <i class="bi bi-house-door-fill fs-5 text-white"></i>
-      </a>
+      <a href="dashboard" class="home-logo me-3" aria-label="Home">
+  <img src="img/logonavbar.png" alt="Logo" width="32" height="32" />
+</a>
     </div>
 
     
@@ -29,7 +29,7 @@
         required
       />
       <button type="submit" class="btn search-btn" aria-label="Search">
-        <i class="bi bi-search"></i>
+       <img src="img/logosearch.png" alt="Search" style="width:20px; height:20px;">
       </button>
     </form>
 
@@ -48,6 +48,30 @@
   </div>
 
   <style>
+
+    .home-logo {
+  display: inline-block;
+  padding: 4px;
+  background-color: #282828;
+  border: 2px solid #282828;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.home-logo:hover {
+  border-color: #1db954;
+  background-color: rgba(29, 185, 84, 0.15);
+  text-decoration: none;
+}
+
+/* Supaya gambar search di button pas dan tidak melar */
+.search-btn img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
     .search-input {
   width: 100%;
   padding: 10px 45px 10px 20px;

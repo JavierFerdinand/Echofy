@@ -1,27 +1,119 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Spotify Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #121212; color: white; }
-        .main-content { overflow-y: auto; height: 100vh; }
-        .card { 
-            background-color: #181818; border-radius: 12px; 
-            transition: transform 0.2s ease-in-out; border: none; 
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #121212;
+            color: white;
         }
-        .card:hover { transform: scale(1.04); background-color: #282828; }
-        .card-title { font-size: 0.9rem; font-weight: 600; color: white; }
-        .card-text { font-size: 0.75rem; color: #b3b3b3; }
-        .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+
+        body::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar,
+        .album-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .main-content {
+            overflow-y: scroll;
+            height: 100vh;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .card {
+            background-color: #181818;
+            border-radius: 16px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+            border: none;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            background-color: #282828;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .card-text {
+            font-size: 0.8rem;
+            color: #b3b3b3;
+        }
+
+        .new-releases {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .album-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 10px;
+        }
+
+        .album-scroll-track {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .album-card {
+            flex-shrink: 0;
+            width: 160px;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        .card-img-top {
+            height: 160px;
+            object-fit: cover;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .card-body {
+            padding: 0.75rem;
+        }
+
+        .no-cover {
+            height: 160px;
+            background-color: #343a40;
+            border-radius: 12px 12px 0 0;
+            color: #adb5bd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
+
 <body class="bg-dark text-white">
-    <!-- Layout Structure -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
-    
+
     <div class="d-flex">
         <div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
 
@@ -29,80 +121,47 @@
             <div class="container-fluid p-4">
                 <h1 class="display-6 mb-4">Welcome back, <span th:text="${user.display_name}"></span></h1>
 
-                <!-- Top Mixes Section -->
-                <section class="mb-5">
-                    <h2 class="h4 mb-3">Your Top Mixes</h2>
-                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
-                        <div class="col" th:each="mix : ${topMixes}">
-                            <div class="card h-100">
-                                <img th:if="${mix.images}" th:src="${mix.images[0].url}" class="card-img-top rounded" alt="Mix">
-                                <div class="card-body p-2">
-                                    <h5 class="card-title text-truncate mb-1" th:text="${mix.name}"></h5>
-                                    <p class="card-text">Top Mix</p>
+                <section class="new-releases mb-5">
+                    <h2 class="section-title">New Releases</h2>
+                    <div class="album-scroll-container" id="albumScroll">
+                        <div class="album-scroll-track" id="albumTrack">
+                            <div class="album-card" th:each="album : ${newReleases}">
+                                <div class="card h-100">
+                                    <img th:if="${album?.images} and ${not album.images.isEmpty()}"
+                                         th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
+                                         onerror="this.src='https://via.placeholder.com/150'">
+                                    <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
+                                         class="no-cover">
+                                        <span class="text-muted">No Cover</span>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title mb-1" th:text="${album.name}">Album Name</h6>
+                                        <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
+                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="album-card" th:each="album : ${newReleases}">
+                                <div class="card h-100">
+                                    <img th:if="${album?.images} and ${not album.images.isEmpty()}"
+                                         th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
+                                         onerror="this.src='https://via.placeholder.com/150'">
+                                    <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
+                                         class="no-cover">
+                                        <span class="text-muted">No Cover</span>
+                                    </div>
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title mb-1" th:text="${album.name}">Album Name</h6>
+                                        <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
+                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- Recommended Section -->
-                <section class="mb-5">
-                    <h2 class="h4 mb-3">Recommended for Today</h2>
-                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
-                        <div class="col" th:each="rec : ${recommendedTracks}">
-                            <div class="card h-100">
-                                <img th:if="${rec.album.images}" th:src="${rec.album.images[0].url}" class="card-img-top rounded" alt="Track">
-                                <div class="card-body p-2">
-                                    <h5 class="card-title text-truncate mb-1" th:text="${rec.name}"></h5>
-                                    <p class="card-text" th:text="${rec.artists[0].name}"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Top Artists Section -->
-                <section class="mb-5">
-                    <h2 class="h4 mb-3">Your Top Artists</h2>
-                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
-                        <div class="col" th:each="artist : ${topArtists}">
-                            <div class="card h-100">
-                                <img th:if="${artist.images}" th:src="${artist.images[0].url}" class="card-img-top rounded" alt="Artist">
-                                <div class="card-body p-2">
-                                    <h5 class="card-title text-truncate mb-1" th:text="${artist.name}"></h5>
-                                    <p class="card-text">Artist</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- New Releases Section -->
-                <section class="mb-5">
-                    <h2 class="h4 mb-3">New Releases</h2>
-                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
-                        <div class="col" th:each="album : ${newReleases}">
-                            <div class="card h-100">
-                                <img th:if="${album?.images} and ${not album.images.isEmpty()}" 
-                                     th:src="${album.images[0].url}" 
-                                     class="card-img-top rounded" 
-                                     alt="Album Cover"
-                                     onerror="this.src='https://via.placeholder.com/150'">
-                                <div th:unless="${album?.images} and ${not album.images.isEmpty()}" 
-                                     class="bg-secondary card-img-top rounded d-flex align-items-center justify-content-center" 
-                                     style="height: 150px;">
-                                    <span class="text-muted">No Cover</span>
-                                </div>
-                                <!-- <div class="card-body p-2">
-                                    <h5 class="card-title text-truncate mb-1" th:text="${album?.name} ?: 'Unknown Album'"></h5>
-                                    <p class="card-text" th:text="${#strings.listJoin(album?.artists?.[*]?.![name], ', ')} ?: 'Unknown Artist'"></p>
-                                </div> -->
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Recently Played Section -->
                 <section class="mb-5">
                     <h2 class="h4 mb-3">Recently Played</h2>
                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
@@ -110,13 +169,13 @@
                     </div>
                 </section>
 
-                <!-- Playlists Section -->
                 <section class="mb-5">
                     <h2 class="h4 mb-3">Your Playlists</h2>
                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
                         <div class="col" th:each="playlist : ${playlists}">
                             <div class="card h-100">
-                                <img th:if="${playlist.images}" th:src="${playlist.images[0].url}" class="card-img-top rounded" alt="Playlist">
+                                <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
+                                     class="card-img-top rounded" alt="Playlist">
                                 <div class="card-body p-2">
                                     <h5 class="card-title text-truncate mb-1" th:text="${playlist.name}"></h5>
                                     <p class="card-text" th:text="${playlist.owner.display_name}"></p>
@@ -129,8 +188,19 @@
         </main>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/main.js}"></script>
+    <script>
+        const container = document.getElementById('albumScroll');
+        const track = document.getElementById('albumTrack');
+        const scrollResetPoint = track.scrollWidth / 2;
+
+        container.addEventListener('scroll', () => {
+            if (container.scrollLeft >= scrollResetPoint) {
+                container.scrollLeft = 0;
+            }
+        });
+    </script>
 </body>
+
 </html>
