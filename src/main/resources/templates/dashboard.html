@@ -6,6 +6,7 @@
     <title>Spotify Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -108,29 +109,33 @@
             justify-content: center;
             font-size: 0.9rem;
         }
-        .text-truncate-2-lines {
-  display: -webkit-box;
-  -webkit-line-clamp: 2; /* Maksimal 2 baris */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-}
-    .card-img-top {
-  height: 150px;
-  object-fit: cover;
-}
-.album-card .card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.card-body {
-  flex: 1;
-  overflow: hidden;
-}
 
+        .text-truncate-2-lines {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /* Maksimal 2 baris */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: normal;
+        }
+
+        .card-img-top {
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .album-card .card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-body {
+            flex: 1;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -151,16 +156,18 @@
                             <div class="album-card" th:each="album : ${newReleases}">
                                 <div class="card h-100">
                                     <img th:if="${album?.images} and ${not album.images.isEmpty()}"
-                                         th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
-                                         onerror="this.src='https://via.placeholder.com/150'">
+                                        th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
+                                        onerror="this.src='https://via.placeholder.com/150'">
                                     <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
-                                         class="no-cover">
+                                        class="no-cover">
                                         <span class="text-muted">No Cover</span>
                                     </div>
                                     <div class="card-body text-center">
-                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album Name</h6>
+                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album
+                                            Name</h6>
                                         <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
-                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
+                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">
+                                            Release Date</p>
                                     </div>
                                 </div>
                             </div>
@@ -168,16 +175,18 @@
                             <div class="album-card" th:each="album : ${newReleases}">
                                 <div class="card h-100">
                                     <img th:if="${album?.images} and ${not album.images.isEmpty()}"
-                                         th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
-                                         onerror="this.src='https://via.placeholder.com/150'">
+                                        th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
+                                        onerror="this.src='https://via.placeholder.com/150'">
                                     <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
-                                         class="no-cover">
+                                        class="no-cover">
                                         <span class="text-muted">No Cover</span>
                                     </div>
                                     <div class="card-body text-center">
                                         <h6 class="card-title mb-1" th:text="${album.name}">Album Name</h6>
-                                        <p class="card-text text-muted mb-1 text-truncate" th:text="'By ' + ${album.artists[0].name}">Artist</p>
-                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
+                                        <p class="card-text text-muted mb-1 text-truncate"
+                                            th:text="'By ' + ${album.artists[0].name}">Artist</p>
+                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">
+                                            Release Date</p>
                                     </div>
                                 </div>
                             </div>
@@ -193,12 +202,19 @@
                 </section>
 
                 <section class="mb-5">
-                    <h2 class="h4 mb-3">Your Playlists</h2>
+                    <div class="d-flex gap-3 align-items-center mb-3">
+                        <h2 class="h4 mb-0">Your Playlists</h2>
+                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                            data-bs-target="#addPlaylistModal">
+                            <i class="bi bi-plus-lg"></i> <!-- Bootstrap Icons -->
+                        </button>
+                    </div>
+
                     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
                         <div class="col" th:each="playlist : ${playlists}">
                             <div class="card h-100">
                                 <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
-                                     class="card-img-top rounded" alt="Playlist">
+                                    class="card-img-top rounded" alt="Playlist">
                                 <div class="card-body p-2">
                                     <h5 class="card-title text-truncate mb-1" th:text="${playlist.name}"></h5>
                                     <p class="card-text" th:text="${playlist.owner.display_name}"></p>
@@ -206,7 +222,43 @@
                             </div>
                         </div>
                     </div>
+
+                             <!-- Modal for adding a new playlist -->
+                <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form th:action="@{/spotify/playlists/add}" method="post" class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-success" id="addPlaylistModalLabel">Tambah Playlist Baru</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="playlistName" class="form-label text-success">Nama Playlist</label>
+                                    <input type="text" class="form-control" id="playlistName" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="playlistDesc" class="form-label text-success">Deskripsi</label>
+                                    <textarea class="form-control" id="playlistDesc" name="description"></textarea>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="publicPlaylist" name="public">
+                                    <label class="form-check-label" for="publicPlaylist">
+                                        Publik
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Buat Playlist</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
                 </section>
+
             </div>
         </main>
     </div>
