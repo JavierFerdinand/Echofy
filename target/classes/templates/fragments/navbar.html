@@ -1,8 +1,7 @@
-<!-- templates/fragments/navbar.html -->
+
 <nav th:fragment="navbar" class="navbar navbar-dark bg-black px-3 py-2 shadow-sm" style="position: sticky; top: 0; z-index: 1000;">
   <div class="container-fluid d-flex align-items-center justify-content-between">
 
-    <!-- Kiri: Logo dan Home -->
     <div class="d-flex align-items-center">
       <a href="/" class="me-3">
         <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/04/Spotify_Logo_CMYK_White.png" alt="Logo" width="32" height="32" />
@@ -12,7 +11,7 @@
       </a>
     </div>
 
-    <!-- Tengah: Search -->
+    
     <form
       class="d-flex flex-grow-1 mx-3 position-relative"
       action="/search"
@@ -48,7 +47,6 @@
     </div>
   </div>
 
-  <!-- Custom CSS for Search -->
   <style>
     .search-input {
   width: 100%;
@@ -62,6 +60,11 @@
 
 .search-input::placeholder {
   color: #bbbbbb;               /* placeholder abu-abu terang */
+}
+.search-input:hover {
+  border-color: #c4cac6;
+  box-shadow: 0 0 6px 1.5px #adb2af;
+  color: white;
 }
 
 .search-input:focus {
