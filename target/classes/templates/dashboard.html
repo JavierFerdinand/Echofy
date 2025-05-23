@@ -202,64 +202,62 @@
                 </section>
 
                 <section class="mb-5">
-                    <div class="d-flex gap-3 align-items-center mb-3">
-                        <h2 class="h4 mb-0">Your Playlists</h2>
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#addPlaylistModal">
-                            <i class="bi bi-plus-lg"></i> <!-- Bootstrap Icons -->
-                        </button>
-                    </div>
+    <div class="d-flex gap-3 align-items-center mb-3">
+        <h2 class="h4 mb-0">Your Playlists</h2>
+        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+            data-bs-target="#addPlaylistModal">
+            <i class="bi bi-plus-lg"></i>
+        </button>
+    </div>
 
-                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
-                        <div class="col" th:each="playlist : ${playlists}">
-                            <div class="card h-100">
-                                <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
-                                    class="card-img-top rounded" alt="Playlist">
-                                <div class="card-body p-2">
-                                    <h5 class="card-title text-truncate mb-1" th:text="${playlist.name}"></h5>
-                                    <p class="card-text" th:text="${playlist.owner.display_name}"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                             <!-- Modal for adding a new playlist -->
-                <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form th:action="@{/spotify/playlists/add}" method="post" class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-success" id="addPlaylistModalLabel">Tambah Playlist Baru</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="playlistName" class="form-label text-success">Nama Playlist</label>
-                                    <input type="text" class="form-control" id="playlistName" name="name" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="playlistDesc" class="form-label text-success">Deskripsi</label>
-                                    <textarea class="form-control" id="playlistDesc" name="description"></textarea>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="publicPlaylist" name="public">
-                                    <label class="form-check-label" for="publicPlaylist">
-                                        Publik
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Buat Playlist</button>
-                            </div>
-                        </form>
+    <div class="album-scroll-container" id="playlistScroll">
+        <div class="album-scroll-track" id="playlistTrack">
+            <div class="album-card" th:each="playlist : ${playlists}">
+                <div class="card h-100">
+                    <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
+                        class="card-img-top rounded" alt="Playlist">
+                    <div class="card-body p-2 text-center">
+                        <h5 class="card-title text-truncate-2-lines mb-1" th:text="${playlist.name}"></h5>
+                        <p class="card-text mb mb-5" th:text="${playlist.owner.display_name}"></p>
                     </div>
                 </div>
-
-                </section>
-
             </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding a new playlist -->
+    <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form th:action="@{/spotify/playlists/add}" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-success" id="addPlaylistModalLabel">Tambah Playlist Baru</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="playlistName" class="form-label text-success">Nama Playlist</label>
+                        <input type="text" class="form-control" id="playlistName" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="playlistDesc" class="form-label text-success">Deskripsi</label>
+                        <textarea class="form-control" id="playlistDesc" name="description"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="publicPlaylist" name="public">
+                        <label class="form-check-label" for="publicPlaylist">
+                            Publik
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Buat Playlist</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>            </div>
         </main>
     </div>
 
@@ -276,6 +274,17 @@
             }
         });
     </script>
+    <script>
+    const playlistContainer = document.getElementById('playlistScroll');
+    const playlistTrack = document.getElementById('playlistTrack');
+    const playlistResetPoint = playlistTrack.scrollWidth / 2;
+
+    playlistContainer.addEventListener('scroll', () => {
+        if (playlistContainer.scrollLeft >= playlistResetPoint) {
+            playlistContainer.scrollLeft = 0;
+        }
+    });
+</script>
 </body>
 
 </html>
