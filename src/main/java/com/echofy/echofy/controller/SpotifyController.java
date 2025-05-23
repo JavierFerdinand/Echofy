@@ -161,4 +161,23 @@ public String addPlaylist(@RequestParam String name,
     return "redirect:/dashboard"; // kembali ke halaman utama
 }
 
+@PostMapping("/spotify/playlists/update")
+public String updatePlaylistName(@RequestParam String playlistId,
+                                 @RequestParam String newName,
+                                 HttpSession session) {
+    String accessToken = (String) session.getAttribute("access_token");
+    if (accessToken != null) {
+        spotifyService.updatePlaylistName(accessToken, playlistId, newName);
+    }
+    return "redirect:/dashboard";
+}
+
+@PostMapping("/spotify/playlists/delete")
+public String deletePlaylist(@RequestParam String playlistId, HttpSession session) {
+    String accessToken = (String) session.getAttribute("access_token");
+    if (accessToken != null) {
+        spotifyService.unfollowPlaylist(accessToken, playlistId);
+    }
+    return "redirect:/dashboard";
+}
 }

@@ -174,4 +174,32 @@ public class SpotifyService {
         }
     }
 
+    public void updatePlaylistName(String accessToken, String playlistId, String newName) {
+    String url = "https://api.spotify.com/v1/playlists/" + playlistId;
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    Map<String, String> body = new HashMap<>();
+    body.put("name", newName);
+
+    HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
+
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
+}
+
+public void unfollowPlaylist(String accessToken, String playlistId) {
+    String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/followers";
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    HttpEntity<Void> request = new HttpEntity<>(headers);
+
+    RestTemplate restTemplate = new RestTemplate();
+    restTemplate.exchange(url, HttpMethod.DELETE, request, Void.class);
+}
 }
