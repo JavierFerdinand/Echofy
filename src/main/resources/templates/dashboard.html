@@ -26,6 +26,8 @@
             height: 100vh;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            padding-bottom: 80px;
+            background: linear-gradient(180deg, #1F1F1F 0%, #121212 100%);
         }
 
         .sidebar {
@@ -33,13 +35,60 @@
             top: 0;
             height: 100vh;
             overflow-y: auto;
+            background-color: #000000;
+            padding: 20px 10px;
+        }
+
+        .song-container {
+            background-color: #181818;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .song-container:hover {
+            background-color: #282828;
+        }
+
+        .song-cover {
+            width: 56px;
+            height: 56px;
+            border-radius: 4px;
+            object-fit: cover;
+            margin-right: 16px;
+        }
+
+        .song-info {
+            flex-grow: 1;
+        }
+
+        .song-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: white;
+        }
+
+        .song-artist {
+            font-size: 0.875rem;
+            color: #b3b3b3;
+        }
+
+        .song-duration {
+            font-size: 0.875rem;
+            color: #b3b3b3;
+            margin-left: 16px;
         }
 
         .card {
             background-color: #181818;
-            border-radius: 16px;
+            border-radius: 8px;
             transition: transform 0.2s ease-in-out, box-shadow 0.2s;
             border: none;
+            padding: 16px;
         }
 
         .card:hover {
@@ -52,11 +101,13 @@
             font-size: 1rem;
             font-weight: 600;
             color: #fff;
+            margin-bottom: 4px;
         }
 
         .card-text {
             font-size: 0.8rem;
             color: #b3b3b3;
+            margin-bottom: 0;
         }
 
         .new-releases {
@@ -64,7 +115,7 @@
         }
 
         .section-title {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
         }
@@ -91,39 +142,36 @@
         }
 
         .card-img-top {
-            height: 160px;
+            width: 100%;
+            aspect-ratio: 1;
             object-fit: cover;
-            border-radius: 12px 12px 0 0;
+            border-radius: 4px;
+            margin-bottom: 16px;
         }
 
         .card-body {
-            padding: 0.75rem;
+            padding: 0;
         }
 
         .no-cover {
             height: 160px;
             background-color: #343a40;
-            border-radius: 12px 12px 0 0;
+            border-radius: 4px;
             color: #adb5bd;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.9rem;
+            margin-bottom: 16px;
         }
 
         .text-truncate-2-lines {
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            /* Maksimal 2 baris */
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: normal;
-        }
-
-        .card-img-top {
-            height: 150px;
-            object-fit: cover;
         }
 
         .album-card .card {
@@ -131,11 +179,138 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            background-color: transparent;
+            padding: 0;
         }
 
-        .card-body {
-            flex: 1;
-            overflow: hidden;
+        .library-section {
+            margin-top: 24px;
+        }
+
+        .library-section h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #b3b3b3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .library-item {
+            color: #b3b3b3;
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .library-item:hover {
+            color: white;
+        }
+
+        .playlist-item {
+            color: #b3b3b3;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            padding: 4px 0;
+            cursor: pointer;
+        }
+
+        .playlist-item:hover {
+            color: white;
+        }
+
+        .nav-link {
+            color: #b3b3b3;
+            font-weight: 600;
+            padding: 8px 0;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        .nav-link.active {
+            color: white;
+        }
+
+        .divider {
+            border-top: 1px solid #282828;
+            margin: 16px 0;
+        }
+
+        .spotify-logo {
+            width: 130px;
+            margin-bottom: 24px;
+            padding: 0 16px;
+        }
+
+        .user-greeting {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 32px;
+        }
+
+        .artist-mix-card {
+            background: linear-gradient(135deg, #2e2e2e, #1e1e1e);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .artist-mix-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .artist-mix-item {
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #b3b3b3;
+        }
+
+        .artist-mix-item:hover {
+            color: white;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: #b3b3b3;
+            margin-top: 24px;
+            padding: 0 16px;
+        }
+
+        .playlist-section {
+            margin-top: 32px;
+        }
+
+        .playlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .song-list {
+            margin-top: 24px;
+        }
+
+        .song-list-header {
+            display: grid;
+            grid-template-columns: 40px 1fr 1fr 100px;
+            padding: 8px 16px;
+            border-bottom: 1px solid #adb5bd;
+            color: #b3b3b3;
+            font-size: 0.875rem;
+            margin-bottom: 8px;
+        }
+
+        .song-list-header div {
+            padding: 0 8px;
         }
     </style>
 </head>
@@ -144,11 +319,76 @@
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <div class="d-flex">
-        <div class="sidebar" th:replace="~{fragments/sidebar :: sidebar}"></div>
+        <div class="sidebar col-md-2 d-none d-md-block">
+            <div class="d-flex flex-column h-100">
+                <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_White.png" alt="Spotify" class="spotify-logo">
+                
+                <div class="flex-grow-1">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="bi bi-house-door-fill me-3"></i>Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-search me-3"></i>Search
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-collection me-3"></i>Your Library
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <div class="library-section">
+                        <h2>Your Library</h2>
+                        <div class="d-flex">
+                            <div class="flex-grow-1">
+                                <div class="library-item">Playlists</div>
+                                <div class="library-item">Artists</div>
+                            </div>
+                            <div>
+                                <i class="bi bi-plus-lg"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="playlist-section">
+                            <div class="playlist-item">Playlist - JavierFerdinand</div>
+                            <div class="playlist-item">Chill day</div>
+                            <div class="playlist-item">Workday</div>
+                            <div class="playlist-item">Lagunya Nikí</div>
+                            <div class="playlist-item">sellconsepen</div>
+                        </div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="library-section">
+                        <h2>Music</h2>
+                        <div class="playlist-item">Podcasts</div>
+                    </div>
+                    
+                    <div class="divider"></div>
+                    
+                    <div class="library-section">
+                        <h2>YouTube In My Heart</h2>
+                        <div class="playlist-item">Nadin Amizah</div>
+                        <div class="playlist-item">Virgoun Mix</div>
+                        <div class="playlist-item">Ariana Grande</div>
+                    </div>
+                </div>
+                
+                <div class="footer-text">
+                    <p>Non-stop music based on your favorite songs and artists.</p>
+                </div>
+            </div>
+        </div>
 
         <main class="flex-grow-1 ms-auto main-content">
             <div class="container-fluid p-4">
-                <h1 class="display-6 mb-4">Welcome back, <span th:text="${user.display_name}"></span></h1>
+                <h1 class="user-greeting">Welcome back, <span th:text="${user.display_name}"></span></h1>
 
                 <section class="new-releases mb-5">
                     <h2 class="section-title">New Releases</h2>
@@ -157,37 +397,16 @@
                             <div class="album-card" th:each="album : ${newReleases}">
                                 <div class="card h-100">
                                     <img th:if="${album?.images} and ${not album.images.isEmpty()}"
-                                        th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
+                                        th:src="${album.images[0].url}" class="card-img-top" alt="Album Cover"
                                         onerror="this.src='https://via.placeholder.com/150'">
                                     <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
                                         class="no-cover">
                                         <span class="text-muted">No Cover</span>
                                     </div>
-                                    <div class="card-body text-center">
-                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album
-                                            Name</h6>
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album Name</h6>
                                         <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
-                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">
-                                            Release Date</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="album-card" th:each="album : ${newReleases}">
-                                <div class="card h-100">
-                                    <img th:if="${album?.images} and ${not album.images.isEmpty()}"
-                                        th:src="${album.images[0].url}" class="card-img-top rounded" alt="Album Cover"
-                                        onerror="this.src='https://via.placeholder.com/150'">
-                                    <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
-                                        class="no-cover">
-                                        <span class="text-muted">No Cover</span>
-                                    </div>
-                                    <div class="card-body text-center">
-                                        <h6 class="card-title mb-1" th:text="${album.name}">Album Name</h6>
-                                        <p class="card-text text-muted mb-1 text-truncate"
-                                            th:text="'By ' + ${album.artists[0].name}">Artist</p>
-                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">
-                                            Release Date</p>
+                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
                                     </div>
                                 </div>
                             </div>
@@ -196,15 +415,89 @@
                 </section>
 
                 <section class="mb-5">
-                    <h2 class="h4 mb-3">Recently Played</h2>
-                    <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 row-cols-xl-6 g-3">
-                        <!-- Content would go here -->
+                    <h2 class="section-title">Recently Played</h2>
+                    <div class="song-list">
+                        <div class="song-list-header">
+                            <div>#</div>
+                            <div>TITLE</div>
+                            <div>ARTIST</div>
+                            <div>TIME</div>
+                        </div>
+                        
+                        <!-- Song containers -->
+                        <div class="song-container">
+                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
+                            <div class="song-info">
+                                <div class="song-title">Baby & Terakhir</div>
+                                <div class="song-artist">Raim Lacde</div>
+                            </div>
+                            <div class="song-duration">3:45</div>
+                        </div>
+                        
+                        <div class="song-container">
+                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
+                            <div class="song-info">
+                                <div class="song-title">Kisah Penuh Kecewa</div>
+                                <div class="song-artist">Ernie Zakri</div>
+                            </div>
+                            <div class="song-duration">4:12</div>
+                        </div>
+                        
+                        <div class="song-container">
+                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
+                            <div class="song-info">
+                                <div class="song-title">Bahagia Sejak Pertama</div>
+                                <div class="song-artist">DYMASIV</div>
+                            </div>
+                            <div class="song-duration">3:30</div>
+                        </div>
+                        
+                        <div class="song-container">
+                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
+                            <div class="song-info">
+                                <div class="song-title">Terryata Eh Terryata</div>
+                                <div class="song-artist">Avoila</div>
+                            </div>
+                            <div class="song-duration">3:58</div>
+                        </div>
+                        
+                        <div class="song-container">
+                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
+                            <div class="song-info">
+                                <div class="song-title">Gunting Kertas Batu</div>
+                                <div class="song-artist">Vintonic</div>
+                            </div>
+                            <div class="song-duration">4:05</div>
+                        </div>
                     </div>
                 </section>
 
                 <section class="mb-5">
-                    <div class="d-flex gap-3 align-items-center mb-3">
-                        <h2 class="h4 mb-0">Your Playlists</h2>
+                    <div class="artist-mix-card">
+                        <h3 class="artist-mix-title">Artists you like</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="artist-mix-item">yung kai Mix</div>
+                                <div class="artist-mix-item">Nadin Amizah Mix</div>
+                                <div class="artist-mix-item">NIKI Mix</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="artist-mix-item">GANGGA Mix</div>
+                                <div class="artist-mix-item">Taylor Swift Mix</div>
+                                <div class="artist-mix-item">NIKI, Ariana Grande and Pamungkas</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="artist-mix-item">Virgoun, raises anggiani and Sal...</div>
+                                <div class="artist-mix-item">GANGGA, Ariana Grande and Nadin...</div>
+                                <div class="artist-mix-item">Yahya, Nadin Amizah and Anash Buana</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <div class="playlist-header">
+                        <h2 class="section-title">Your Playlists</h2>
                         <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
                             data-bs-target="#addPlaylistModal">
                             <i class="bi bi-plus-lg"></i>
@@ -216,70 +509,65 @@
                             <div class="album-card" th:each="playlist : ${playlists}">
                                 <div class="card h-100 d-flex flex-column justify-content-between">
                                     <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
-                                        class="card-img-top rounded" alt="Playlist">
-                                    <div class="card-body p-2 text-center">
-                                        <h5 class="card-title text-truncate-2-lines mb-1" th:text="${playlist.name}">
-                                        </h5>
+                                        class="card-img-top" alt="Playlist">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-truncate-2-lines mb-1" th:text="${playlist.name}"></h5>
                                         <p class="card-text mb-2" th:text="${playlist.owner.display_name}"></p>
 
-                                        <!-- Tombol Edit Playlist -->
                                         <div class="d-flex gap-2 justify-content-center">
-                                        <button type="button" class="d-flex btn btn-outline-warning btn-sm mb-1"
-                                            data-bs-toggle="modal"
-                                            th:attr="data-bs-target='#editPlaylistModal__' + ${playlist.id}">
-                                            Edit
-                                        </button>
-                                        <form th:action="@{/spotify/playlists/delete}" method="post"
-                                            onsubmit="return confirm('Yakin ingin menghapus playlist ini?');">
-                                            <input type="hidden" name="playlistId" th:value="${playlist.id}" />
-                                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                Hapus
+                                            <button type="button" class="d-flex btn btn-outline-warning btn-sm mb-1"
+                                                data-bs-toggle="modal"
+                                                th:attr="data-bs-target='#editPlaylistModal__' + ${playlist.id}">
+                                                Edit
                                             </button>
-                                        </form>
+                                            <form th:action="@{/spotify/playlists/delete}" method="post"
+                                                onsubmit="return confirm('Yakin ingin menghapus playlist ini?');">
+                                                <input type="hidden" name="playlistId" th:value="${playlist.id}" />
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                    Hapus
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Modal Edit Playlist -->
-                            <div th:each="playlist : ${playlists}">
-                                <div class="modal fade" th:id="'editPlaylistModal__' + ${playlist.id}" tabindex="-1"
-                                    th:attr="aria-labelledby='editPlaylistModalLabel__' + ${playlist.id}"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <form th:action="@{/spotify/playlists/update}" method="post"
-                                            class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title text-warning"
-                                                    th:id="'editPlaylistModalLabel__' + ${playlist.id}">
-                                                    Edit Nama Playlist
-                                                </h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <input type="hidden" name="playlistId" th:value="${playlist.id}" />
-                                                <div class="mb-3">
-                                                    <label class="form-label">Nama Baru</label>
-                                                    <input type="text" class="form-control" name="newName"
-                                                        th:value="${playlist.name}" required>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-warning">Simpan</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Modal Edit Playlist -->
                         </div>
                     </div>
                 </section>
 
-
+                <!-- Modal Edit Playlist -->
+                <div th:each="playlist : ${playlists}">
+                    <div class="modal fade" th:id="'editPlaylistModal__' + ${playlist.id}" tabindex="-1"
+                        th:attr="aria-labelledby='editPlaylistModalLabel__' + ${playlist.id}"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form th:action="@{/spotify/playlists/update}" method="post"
+                                class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-warning"
+                                        th:id="'editPlaylistModalLabel__' + ${playlist.id}">
+                                        Edit Nama Playlist
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="playlistId" th:value="${playlist.id}" />
+                                    <div class="mb-3">
+                                        <label class="form-label">Nama Baru</label>
+                                        <input type="text" class="form-control" name="newName"
+                                            th:value="${playlist.name}" required>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-warning">Simpan</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Modal for adding a new playlist -->
                 <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
@@ -316,7 +604,6 @@
                         </form>
                     </div>
                 </div>
-                </section>
             </div>
         </main>
     </div>
@@ -333,8 +620,7 @@
                 container.scrollLeft = 0;
             }
         });
-    </script>
-    <script>
+
         const playlistContainer = document.getElementById('playlistScroll');
         const playlistTrack = document.getElementById('playlistTrack');
         const playlistResetPoint = playlistTrack.scrollWidth / 2;
