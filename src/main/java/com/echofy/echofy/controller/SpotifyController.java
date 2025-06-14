@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.echofy.echofy.service.SpotifyService;
@@ -151,18 +152,26 @@ public class SpotifyController {
         return (List<Map<String, Object>>) playlists.get("items");
     }
 
-    @PostMapping("/spotify/playlists/add")
+@PostMapping("/spotify/playlists/add")
 public String addPlaylist(@RequestParam String name,
                           @RequestParam(required = false) String description,
-                          @RequestParam(required = false, defaultValue = "false") boolean publicPlaylist,
-                          HttpSession session) {
+                          @RequestParam(name = "publicPlaylist", defaultValue = "false") boolean publicPlaylist,
+                          @RequestParam(required = false) MultipartFile coverImage,
+                          HttpSession session) throws IOException {
 
     String accessToken = (String) session.getAttribute("access_token");
-    String userId = spotifyService.getCurrentUserId(accessToken); // kamu harus buat method ini
-    spotifyService.createPlaylist(accessToken, userId, name, description, publicPlaylist);
+    String userId = spotifyService.getCurrentUserId(accessToken);
 
-    return "redirect:/dashboard"; // kembali ke halaman utama
+    String playlistId = spotifyService.createPlaylist(accessToken, userId, name, description, publicPlaylist);
+
+    if (coverImage != null && !coverImage.isEmpty()) {
+        spotifyService.uploadPlaylistImage(accessToken, playlistId, coverImage);
+    }
+
+    return "redirect:/dashboard";
 }
+
+
 
 @PostMapping("/spotify/playlists/update")
 public String updatePlaylistName(@RequestParam String playlistId,
@@ -183,4 +192,5 @@ public String deletePlaylist(@RequestParam String playlistId, HttpSession sessio
     }
     return "redirect:/dashboard";
 }
+
 }

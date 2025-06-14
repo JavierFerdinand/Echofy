@@ -511,6 +511,113 @@
             font-size: 2rem;
             color: #535353;
         }
+
+        /* --- MODAL TAMBAH PLAYLIST STYLE --- */
+        /* ========== SPOTIFY MODAL STYLES ========== */
+        .spotify-modal {
+            background-color: #282828;
+            border: 1px solid #404040;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .spotify-modal-header {
+            border-bottom: 1px solid #404040;
+            padding: 20px 24px;
+        }
+
+        .spotify-modal-footer {
+            border-top: 1px solid #404040;
+            padding: 16px 24px;
+        }
+
+        .text-white-80 {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .text-spotify-green {
+            color: #1DB954;
+        }
+
+        .spotify-input {
+            background-color: #121212;
+            border: 1px solid #404040;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .spotify-input:focus {
+            background-color: #121212;
+            color: white;
+            border-color: #1DB954;
+            box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2);
+        }
+
+        .spotify-input::placeholder {
+            color: #535353;
+        }
+
+        .spotify-switch {
+            width: 48px;
+            height: 24px;
+            background-color: #535353;
+            border: none;
+        }
+
+        .spotify-switch:checked {
+            background-color: #1DB954;
+        }
+
+        .spotify-file-input {
+            position: relative;
+            border: 2px dashed #404040;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .spotify-file-input:hover {
+            border-color: #535353;
+        }
+
+        .file-input-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .btn-spotify-green {
+            background-color: #1DB954;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-spotify-green:hover {
+            background-color: #1ED760;
+            transform: scale(1.02);
+        }
+
+        .spotify-btn-cancel {
+            border: 1px solid #727272;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .spotify-btn-cancel:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #a0a0a0;
+        }
+
+        /* ========== END SPOTIFY MODAL STYLES ========== */
     </style>
 </head>
 
@@ -617,48 +724,48 @@
                 </section>
 
                 <section class="recently-played mb-5">
-    <h2 class="section-title">Recently Played</h2>
-    <div class="album-scroll-container">
-        <div class="album-scroll-track d-flex flex-row gap-3">
-            <!-- Loop semua track -->
-            <div class="album-card" th:each="track : ${recentlyPlayed}" style="flex: 0 0 auto; width: 200px;">
-                <div class="card h-100">
-                    <!-- Gambar album -->
-                    <img th:if="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
-                         th:src="${track.track.album.images[0].url}"
-                         class="card-img-top" alt="Track Cover"
-                         onerror="this.src='https://via.placeholder.com/150'">
+                    <h2 class="section-title">Recently Played</h2>
+                    <div class="album-scroll-container">
+                        <div class="album-scroll-track d-flex flex-row gap-3">
+                            <!-- Loop semua track -->
+                            <div class="album-card" th:each="track : ${recentlyPlayed}"
+                                style="flex: 0 0 auto; width: 200px;">
+                                <div class="card h-100">
+                                    <!-- Gambar album -->
+                                    <img th:if="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
+                                        th:src="${track.track.album.images[0].url}" class="card-img-top"
+                                        alt="Track Cover" onerror="this.src='https://via.placeholder.com/150'">
 
-                    <!-- Fallback kalau tidak ada gambar -->
-                    <div th:unless="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
-                         class="no-cover d-flex justify-content-center align-items-center"
-                         style="height: 150px; background-color: #e9ecef;">
-                        <span class="text-muted">No Cover</span>
+                                    <!-- Fallback kalau tidak ada gambar -->
+                                    <div th:unless="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
+                                        class="no-cover d-flex justify-content-center align-items-center"
+                                        style="height: 150px; background-color: #e9ecef;">
+                                        <span class="text-muted">No Cover</span>
+                                    </div>
+
+                                    <!-- Informasi lagu -->
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-1 text-truncate-2-lines"
+                                            th:text="${track?.track?.name != null} ? ${track.track.name} : 'Unknown Track'">
+                                            Track Name
+                                        </h6>
+
+                                        <p class="card-text mb-1"
+                                            th:if="${track?.track?.artists != null and !track.track.artists.isEmpty()}"
+                                            th:text="'By ' + ${track.track.artists[0].name}">
+                                            Artist
+                                        </p>
+
+                                        <p class="card-text small recently-played-time"
+                                            th:text="${track.played_at_formatted}">
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Informasi lagu -->
-                    <div class="card-body">
-                        <h6 class="card-title mb-1 text-truncate-2-lines"
-                            th:text="${track?.track?.name != null} ? ${track.track.name} : 'Unknown Track'">
-                            Track Name
-                        </h6>
-
-                        <p class="card-text mb-1"
-                           th:if="${track?.track?.artists != null and !track.track.artists.isEmpty()}"
-                           th:text="'By ' + ${track.track.artists[0].name}">
-                            Artist
-                        </p>
-
-                      <p class="card-text small recently-played-time"
-   th:text="${track.played_at_formatted}">
-</p>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                </section>
 
 
 
@@ -901,71 +1008,93 @@
                 <!-- Modal for adding a new playlist -->
                 <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form th:action="@{/spotify/playlists/add}" method="post" class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title text-success" id="addPlaylistModalLabel">Tambah
-                                    Playlist Baru</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label for="playlistName" class="form-label text-success">Nama
-                                        Playlist</label>
-                                    <input type="text" class="form-control" id="playlistName" name="name" required>
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content spotify-modal">
+                            <form th:action="@{/spotify/playlists/add}" method="post" enctype="multipart/form-data">
+                                <div class="modal-header spotify-modal-header">
+                                    <h5 class="modal-title text-spotify-green fw-bold" id="addPlaylistModalLabel">
+                                        <i class="bi bi-plus-circle-fill me-2"></i>Buat Playlist Baru
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="playlistDesc" class="form-label text-success">Deskripsi</label>
-                                    <textarea class="form-control" id="playlistDesc" name="description"></textarea>
+
+                                <div class="modal-body">
+                                    <div class="mb-4">
+                                        <label for="playlistName" class="form-label text-white-80 fw-medium mb-2">Nama
+                                            Playlist</label>
+                                        <input type="text" class="form-control spotify-input" id="playlistName"
+                                            name="name" required placeholder="Masukkan nama playlist">
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="playlistDesc"
+                                            class="form-label text-white-80 fw-medium mb-2">Deskripsi</label>
+                                        <textarea class="form-control spotify-input" id="playlistDesc"
+                                            name="description" rows="3"
+                                            placeholder="Tambahkan deskripsi (opsional)"></textarea>
+                                    </div>
+
+                                    <div class="form-check form-switch mb-4 d-flex align-items-center">
+                                        <input class="form-check-input spotify-switch" type="checkbox"
+                                            id="publicPlaylist" name="publicPlaylist">
+                                        <label class="form-check-label text-white-80 ms-2 fw-medium"
+                                            for="publicPlaylist">Buat playlist publik</label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="coverImage" class="form-label text-white-80 fw-medium mb-2">Cover
+                                            Playlist</label>
+                                        <div class="spotify-file-input">
+                                            <input class="form-control" type="file" id="coverImage" name="coverImage"
+                                                accept="image/jpeg">
+                                            <div class="file-input-label">Unggah gambar (JPEG, maks. 5MB)</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="publicPlaylist" name="public">
-                                    <label class="form-check-label" for="publicPlaylist">
-                                        Publik
-                                    </label>
+
+                                <div class="modal-footer spotify-modal-footer">
+                                    <button type="button" class="btn btn-outline-light spotify-btn-cancel"
+                                        data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-spotify-green fw-bold">
+                                        <i class="bi bi-music-note-beamed me-2"></i> Simpan Playlist
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                <button type="submit" class="btn btn-primary">Buat Playlist</button>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/js/main.js}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // For album scroll
-            const albumContainer = document.getElementById('albumScroll');
-            const albumTrack = document.getElementById('albumTrack');
-            if (albumContainer && albumTrack) {
-                const albumResetPoint = albumTrack.scrollWidth / 2;
-                albumContainer.addEventListener('scroll', () => {
-                    if (albumContainer.scrollLeft >= albumResetPoint) {
-                        albumContainer.scrollLeft = 0;
-                    }
-                });
-            }
 
-            // For playlist scroll
-            const playlistContainer = document.getElementById('playlistScroll');
-            const playlistTrack = document.getElementById('playlistTrack');
-            if (playlistContainer && playlistTrack) {
-                const playlistResetPoint = playlistTrack.scrollWidth / 2;
-                playlistContainer.addEventListener('scroll', () => {
-                    if (playlistContainer.scrollLeft >= playlistResetPoint) {
-                        playlistContainer.scrollLeft = 0;
-                    }
-                });
-            }
-        });
-    </script>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                <script th:src="@{/js/main.js}"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        // For album scroll
+                        const albumContainer = document.getElementById('albumScroll');
+                        const albumTrack = document.getElementById('albumTrack');
+                        if (albumContainer && albumTrack) {
+                            const albumResetPoint = albumTrack.scrollWidth / 2;
+                            albumContainer.addEventListener('scroll', () => {
+                                if (albumContainer.scrollLeft >= albumResetPoint) {
+                                    albumContainer.scrollLeft = 0;
+                                }
+                            });
+                        }
+
+                        // For playlist scroll
+                        const playlistContainer = document.getElementById('playlistScroll');
+                        const playlistTrack = document.getElementById('playlistTrack');
+                        if (playlistContainer && playlistTrack) {
+                            const playlistResetPoint = playlistTrack.scrollWidth / 2;
+                            playlistContainer.addEventListener('scroll', () => {
+                                if (playlistContainer.scrollLeft >= playlistResetPoint) {
+                                    playlistContainer.scrollLeft = 0;
+                                }
+                            });
+                        }
+                    });
+                </script>
 </body>
 
 </html>

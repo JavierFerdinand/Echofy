@@ -1,10 +1,13 @@
 package com.echofy.echofy.service;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
@@ -45,6 +49,7 @@ public class SpotifyService {
                         "user-read-email",
                         "playlist-read-private",
                         "playlist-read-collaborative",
+                        "ugc-image-upload",
                         "user-top-read",
                         "user-library-read",
                         "user-read-recently-played",
@@ -152,31 +157,52 @@ public class SpotifyService {
         }
     }
 
-    public void createPlaylist(String accessToken, String userId, String name, String description, boolean publicPlaylist) {
-        String url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
+    public String createPlaylist(String accessToken, String userId, String name, String description, boolean publicPlaylist) {
+    String url = "https://api.spotify.com/v1/users/" + userId + "/playlists";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("name", name);
-        body.put("description", description);
-        body.put("public", publicPlaylist);
+    // ✅ Pakai LinkedHashMap agar urutan tetap
+    Map<String, Object> body = new LinkedHashMap<>();
+    body.put("name", name);
+    body.put("description", description);
+    body.put("public", publicPlaylist); // Ini sudah boolean, tidak perlu diconvert
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
-        RestTemplate restTemplate = new RestTemplate();
+    // Debug log
+    System.out.println("🟡 Payload: " + body);
 
-        try {
-            ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+    HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+    RestTemplate restTemplate = new RestTemplate();
 
-            if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Gagal membuat playlist: " + response.getStatusCode());
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("Terjadi kesalahan saat membuat playlist", e);
-        }
+    ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
+
+    if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+        return (String) response.getBody().get("id");
     }
+
+    throw new RuntimeException("❌ Gagal membuat playlist: " + response.getStatusCode());
+}
+
+
+public void uploadPlaylistImage(String accessToken, String playlistId, MultipartFile imageFile) throws IOException {
+    String url = "https://api.spotify.com/v1/playlists/" + playlistId + "/images";
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    headers.setContentType(MediaType.parseMediaType("image/jpeg")); // harus JPEG!
+
+    // Encode file ke base64 string
+    byte[] imageBytes = imageFile.getBytes();
+    String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+    HttpEntity<String> request = new HttpEntity<>(base64Image, headers);
+    RestTemplate restTemplate = new RestTemplate();
+
+    restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
+}
+
 
     public void updatePlaylistName(String accessToken, String playlistId, String newName) {
     String url = "https://api.spotify.com/v1/playlists/" + playlistId;
@@ -234,6 +260,22 @@ public List<Map<String, Object>> getRecentlyPlayedTracks(String accessToken) {
     }
 
     return items;
+}
+public void updatePlaylistVisibility(String accessToken, String playlistId, boolean makePublic) {
+    String url = "https://api.spotify.com/v1/playlists/" + playlistId;
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    headers.setContentType(MediaType.APPLICATION_JSON);
+
+    Map<String, Object> body = new HashMap<>();
+    body.put("public", makePublic);
+    
+
+    HttpEntity<Map<String, Object>> request = new HttpEntity<>(body, headers);
+    RestTemplate restTemplate = new RestTemplate();
+
+    restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
 }
 
 
