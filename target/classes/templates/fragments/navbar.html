@@ -33,19 +33,29 @@
       </button>
     </form>
 
-    <!-- Kanan: Notifikasi, Teman, Profil -->
-    <div class="d-flex align-items-center gap-3">
-      <a href="#" class="text-white" aria-label="Notifications"><i class="bi bi-bell fs-5"></i></a>
-      <a href="#" class="text-white" aria-label="Friends"><i class="bi bi-people fs-5"></i></a>
-      <div
-        class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
-        style="width: 32px; height: 32px;"
-        aria-label="User profile initial"
-      >
-        <span th:text="${user.display_name.substring(0,1)}"></span>
-      </div>
-    </div>
+   <!-- Kanan: Notifikasi, Teman, Profil -->
+<div class="d-flex align-items-center gap-3">
+  <a href="#" class="text-white" aria-label="Notifications"><i class="bi bi-bell fs-5"></i></a>
+  <a href="#" class="text-white" aria-label="Friends"><i class="bi bi-people fs-5"></i></a>
+
+  <!-- Profil: jika ada gambar -->
+  <div th:if="${user.images != null and !user.images.isEmpty()}" class="position-relative"
+       th:title="${user.display_name}">
+    <img th:src="${user.images[0].url}"
+         alt="Profile Image"
+         class="rounded-circle"
+         style="width: 32px; height: 32px; object-fit: cover; cursor: pointer;">
   </div>
+
+  <!-- Profil: fallback inisial -->
+  <div th:unless="${user.images != null and !user.images.isEmpty()}"
+       class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
+       style="width: 32px; height: 32px; cursor: pointer;"
+       th:title="${user.display_name}">
+    <span th:text="${user.display_name.substring(0,1)}">U</span>
+  </div>
+</div>
+
 
   <style>
 

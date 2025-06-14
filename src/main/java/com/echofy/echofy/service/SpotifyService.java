@@ -1,5 +1,9 @@
 package com.echofy.echofy.service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -202,4 +206,35 @@ public void unfollowPlaylist(String accessToken, String playlistId) {
     RestTemplate restTemplate = new RestTemplate();
     restTemplate.exchange(url, HttpMethod.DELETE, request, Void.class);
 }
+public List<Map<String, Object>> getRecentlyPlayedTracks(String accessToken) {
+    String url = "https://api.spotify.com/v1/me/player/recently-played?limit=10";
+    Map<String, Object> response = makeSpotifyGetRequest(url, accessToken);
+
+    List<Map<String, Object>> items = (List<Map<String, Object>>) response.get("items");
+
+    if (items == null) return List.of();
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm 'WIB'")
+            .withZone(ZoneId.of("Asia/Jakarta"));
+
+    for (Map<String, Object> item : items) {
+        String playedAtStr = (String) item.get("played_at");
+
+        if (playedAtStr != null) {
+            try {
+                Instant instant = Instant.parse(playedAtStr);
+                String formatted = formatter.format(instant);
+                item.put("played_at_formatted", formatted);
+            } catch (DateTimeParseException e) {
+                item.put("played_at_formatted", "Unknown Time");
+            }
+        } else {
+            item.put("played_at_formatted", "Unknown Time");
+        }
+    }
+
+    return items;
+}
+
+
 }

@@ -65,6 +65,7 @@ public class SpotifyController {
             List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
             int likedSongsCount = spotifyService.getLikedSongsCount(accessToken);
             Map<String, Object> newReleases = spotifyService.getNewReleases(accessToken);
+            List<Map<String, Object>> recentlyPlayed = spotifyService.getRecentlyPlayedTracks(accessToken);
 
             Map<String, Object> albums = (Map<String, Object>) newReleases.get("albums");
             List<Map<String, Object>> albumItems = (List<Map<String, Object>>) albums.get("items");
@@ -73,8 +74,10 @@ public class SpotifyController {
             model.addAttribute("playlists", playlists.get("items"));
             model.addAttribute("likedSongsCount", likedSongsCount);
             model.addAttribute("topTracks", topTracks);
-            model.addAttribute("token", accessToken); // Tambahkan 
+            model.addAttribute("token", accessToken);
             model.addAttribute("newReleases", albumItems);
+            model.addAttribute("recentlyPlayed", recentlyPlayed);
+
            
 
             return "dashboard";

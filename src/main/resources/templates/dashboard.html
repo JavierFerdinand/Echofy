@@ -313,30 +313,30 @@
             padding: 0 8px;
         }
 
-        /* Footer Styles */
+        /* Team Footer Styles */
         .team-footer {
             background-color: #181818;
             border-top: 1px solid #282828;
             padding: 2rem 0;
             margin-top: 3rem;
         }
-        
+
         .team-member-list {
             list-style-type: none;
             padding-left: 0;
         }
-        
+
         .team-member-list li {
             padding: 0.75rem 0;
             border-bottom: 1px solid #282828;
             display: flex;
             align-items: center;
         }
-        
+
         .team-member-list li:last-child {
             border-bottom: none;
         }
-        
+
         .member-number {
             color: #1DB954;
             font-weight: bold;
@@ -344,19 +344,19 @@
             width: 1.5rem;
             text-align: right;
         }
-        
+
         .member-name {
             color: white;
             flex-grow: 1;
         }
-        
+
         .footer-heading {
             color: white;
             margin-bottom: 1.5rem;
             font-weight: 700;
             font-size: 1.25rem;
         }
-        
+
         .footer-copyright {
             color: #b3b3b3;
             font-size: 0.875rem;
@@ -372,7 +372,7 @@
             gap: 0.75rem;
             margin-left: auto;
         }
-        
+
         .member-social a {
             color: #b3b3b3;
             transition: all 0.3s ease;
@@ -383,13 +383,13 @@
             width: 24px;
             height: 24px;
         }
-        
+
         .member-social a:hover {
             color: #1DB954;
             transform: scale(1.1);
             text-decoration: none;
         }
-        
+
         .member-info {
             display: flex;
             align-items: center;
@@ -417,6 +417,100 @@
             color: #1DB954;
             transform: scale(1.1);
         }
+
+        /* Recently Played Section Styles */
+        .recently-played {
+            margin-bottom: 3rem;
+        }
+
+        .recently-played .album-scroll-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 15px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .recently-played .album-scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .recently-played .album-scroll-track {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: nowrap;
+            padding-bottom: 5px;
+        }
+
+        .recently-played .album-card {
+            flex: 0 0 auto;
+            width: 160px;
+        }
+
+        .recently-played .card {
+            background-color: #181818;
+            transition: all 0.3s ease;
+            height: 100%;
+            border-radius: 8px;
+            padding: 0;
+        }
+
+        .recently-played .card:hover {
+            background-color: #282828;
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .recently-played .card-img-top {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 16px;
+        }
+
+        .recently-played .card-body {
+            padding: 0 8px 16px 8px;
+        }
+
+        .recently-played .card-title {
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recently-played .card-text {
+            font-size: 0.8rem;
+            color: #b3b3b3;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .recently-played-time {
+            font-size: 0.75rem;
+            color: #b3b3b3;
+            opacity: 0.8;
+        }
+
+        .recently-played .no-cover {
+            height: 160px;
+            background-color: #282828;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .recently-played .no-cover i {
+            font-size: 2rem;
+            color: #535353;
+        }
     </style>
 </head>
 
@@ -426,8 +520,9 @@
     <div class="d-flex">
         <div class="sidebar col-md-2 d-none d-md-block">
             <div class="d-flex flex-column h-100">
-                <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_White.png" alt="Spotify" class="spotify-logo">
-                
+                <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_White.png"
+                    alt="Spotify" class="spotify-logo">
+
                 <div class="flex-grow-1">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -446,7 +541,7 @@
                             </a>
                         </li>
                     </ul>
-                    
+
                     <div class="library-section">
                         <h2>Your Library</h2>
                         <div class="d-flex">
@@ -458,7 +553,7 @@
                                 <i class="bi bi-plus-lg"></i>
                             </div>
                         </div>
-                        
+
                         <div class="playlist-section">
                             <div class="playlist-item">Playlist - JavierFerdinand</div>
                             <div class="playlist-item">Chill day</div>
@@ -467,16 +562,16 @@
                             <div class="playlist-item">sellconsepen</div>
                         </div>
                     </div>
-                    
+
                     <div class="divider"></div>
-                    
+
                     <div class="library-section">
                         <h2>Music</h2>
                         <div class="playlist-item">Podcasts</div>
                     </div>
-                    
+
                     <div class="divider"></div>
-                    
+
                     <div class="library-section">
                         <h2>YouTube In My Heart</h2>
                         <div class="playlist-item">Nadin Amizah</div>
@@ -484,7 +579,7 @@
                         <div class="playlist-item">Ariana Grande</div>
                     </div>
                 </div>
-                
+
                 <div class="footer-text">
                     <p>Non-stop music based on your favorite songs and artists.</p>
                 </div>
@@ -509,9 +604,11 @@
                                         <span class="text-muted">No Cover</span>
                                     </div>
                                     <div class="card-body">
-                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album Name</h6>
+                                        <h6 class="card-title mb-1 text-truncate-2-lines" th:text="${album.name}">Album
+                                            Name</h6>
                                         <p class="card-text mb-1" th:text="'By ' + ${album.artists[0].name}">Artist</p>
-                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">Release Date</p>
+                                        <p class="card-text small" th:text="'Released: ' + ${album.release_date}">
+                                            Release Date</p>
                                     </div>
                                 </div>
                             </div>
@@ -519,63 +616,51 @@
                     </div>
                 </section>
 
-                <section class="mb-5">
-                    <h2 class="section-title">Recently Played</h2>
-                    <div class="song-list">
-                        <div class="song-list-header">
-                            <div>#</div>
-                            <div>TITLE</div>
-                            <div>ARTIST</div>
-                            <div>TIME</div>
-                        </div>
-                        
-                        <!-- Song containers -->
-                        <div class="song-container">
-                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
-                            <div class="song-info">
-                                <div class="song-title">Baby & Terakhir</div>
-                                <div class="song-artist">Raim Lacde</div>
-                            </div>
-                            <div class="song-duration">3:45</div>
-                        </div>
-                        
-                        <div class="song-container">
-                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
-                            <div class="song-info">
-                                <div class="song-title">Kisah Penuh Kecewa</div>
-                                <div class="song-artist">Ernie Zakri</div>
-                            </div>
-                            <div class="song-duration">4:12</div>
-                        </div>
-                        
-                        <div class="song-container">
-                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
-                            <div class="song-info">
-                                <div class="song-title">Bahagia Sejak Pertama</div>
-                                <div class="song-artist">DYMASIV</div>
-                            </div>
-                            <div class="song-duration">3:30</div>
-                        </div>
-                        
-                        <div class="song-container">
-                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
-                            <div class="song-info">
-                                <div class="song-title">Terryata Eh Terryata</div>
-                                <div class="song-artist">Avoila</div>
-                            </div>
-                            <div class="song-duration">3:58</div>
-                        </div>
-                        
-                        <div class="song-container">
-                            <img src="https://i.scdn.co/image/ab67616d00001e02ff9ca10b55ce82ae553c8228" class="song-cover">
-                            <div class="song-info">
-                                <div class="song-title">Gunting Kertas Batu</div>
-                                <div class="song-artist">Vintonic</div>
-                            </div>
-                            <div class="song-duration">4:05</div>
-                        </div>
+                <section class="recently-played mb-5">
+    <h2 class="section-title">Recently Played</h2>
+    <div class="album-scroll-container">
+        <div class="album-scroll-track d-flex flex-row gap-3">
+            <!-- Loop semua track -->
+            <div class="album-card" th:each="track : ${recentlyPlayed}" style="flex: 0 0 auto; width: 200px;">
+                <div class="card h-100">
+                    <!-- Gambar album -->
+                    <img th:if="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
+                         th:src="${track.track.album.images[0].url}"
+                         class="card-img-top" alt="Track Cover"
+                         onerror="this.src='https://via.placeholder.com/150'">
+
+                    <!-- Fallback kalau tidak ada gambar -->
+                    <div th:unless="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
+                         class="no-cover d-flex justify-content-center align-items-center"
+                         style="height: 150px; background-color: #e9ecef;">
+                        <span class="text-muted">No Cover</span>
                     </div>
-                </section>
+
+                    <!-- Informasi lagu -->
+                    <div class="card-body">
+                        <h6 class="card-title mb-1 text-truncate-2-lines"
+                            th:text="${track?.track?.name != null} ? ${track.track.name} : 'Unknown Track'">
+                            Track Name
+                        </h6>
+
+                        <p class="card-text mb-1"
+                           th:if="${track?.track?.artists != null and !track.track.artists.isEmpty()}"
+                           th:text="'By ' + ${track.track.artists[0].name}">
+                            Artist
+                        </p>
+
+                      <p class="card-text small recently-played-time"
+   th:text="${track.played_at_formatted}">
+</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 
                 <section class="mb-5">
                     <div class="artist-mix-card">
@@ -616,7 +701,8 @@
                                     <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
                                         class="card-img-top" alt="Playlist">
                                     <div class="card-body">
-                                        <h5 class="card-title text-truncate-2-lines mb-1" th:text="${playlist.name}"></h5>
+                                        <h5 class="card-title text-truncate-2-lines mb-1" th:text="${playlist.name}">
+                                        </h5>
                                         <p class="card-text mb-2" th:text="${playlist.owner.display_name}"></p>
 
                                         <div class="d-flex gap-2 justify-content-center">
@@ -653,10 +739,14 @@
                                             <span class="member-name">Javier Ferdinand Bernadine (041) </span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="https://www.linkedin.com/in/javier-ferdinand-a8112021a/" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="https://www.instagram.com/javierr.fnd" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="https://www.github.com/JavierFerdinand" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="https://open.spotify.com/user/31flksx4sbwys3k4auqgftxsrbou" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/javier-ferdinand-a8112021a/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/javierr.fnd" target="_blank"
+                                                title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="https://www.github.com/JavierFerdinand" target="_blank"
+                                                title="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/31flksx4sbwys3k4auqgftxsrbou"
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                     <li>
@@ -665,10 +755,14 @@
                                             <span class="member-name">Desinta Dian Kusumaningrum (035)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="#" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/diann_.an?igsh=cDAwNG5jYWVlazVn"
+                                                target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="https://github.com/dysee-xian" target="_blank" title="GitHub"><i
+                                                    class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/315gby4cikkcmx7cfu3etv7ak3wy?si=uE0jjqWDQ-WsT6pAQj0WyA"
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                     <li>
@@ -677,10 +771,14 @@
                                             <span class="member-name">Della Ayu Nurlaili (041)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="#" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/dellanrl" target="_blank"
+                                                title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="https://github.com/dellanrl" target="_blank" title="GitHub"><i
+                                                    class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/31njf7f55omfn2eakted3sijqsd4?si=c1bt_QRCTL6JNt5GPnJ5ag"
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                     <li>
@@ -689,10 +787,14 @@
                                             <span class="member-name">Muhammad Dzikri Azkia (075)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="#" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/javier-ferdinand-a8112021a/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/azk_ia.r" target="_blank"
+                                                title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="https://github.com/azzkiaa" target="_blank" title="GitHub"><i
+                                                    class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/31u7un43usmqap2k7b74lsl4xz6q?si=7hADdDpaQ-Sa2f2wR4jkUA"
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                     <li>
@@ -701,10 +803,14 @@
                                             <span class="member-name">Amelanov Destyawanda (092)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="#" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/meyaalav__?igsh=Y296OHV2NXFieDNx"
+                                                target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="https://github.com/AmelanovDestyawanda" target="_blank"
+                                                title="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/31l2ks4klmrjafb462ucsv4tr7ee?si=_yuLWhaQSC61tVTx3JSpMA"
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                     <li>
@@ -713,10 +819,14 @@
                                             <span class="member-name">Desta Berlianda Faathir (095)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="#" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/javier-ferdinand-a8112021a/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/des_vect?igsh=MWN6eW1tZWl5cmt4Ng=="
+                                                target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href=" https://github.com/DestaBerlianda" target="_blank"
+                                                title="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/31op3olr324qzt2rqatcndrzia4a?si=t8vok51MQHOBFU5XqiTIVw "
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                     <li>
@@ -725,17 +835,24 @@
                                             <span class="member-name">Given Dhimas Ara Dea (101)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
-                                            <a href="#" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
-                                            <a href="#" target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
+                                            <a href="https://www.linkedin.com/in/javier-ferdinand-a8112021a/"
+                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.instagram.com/gvenqt?igsh=MWtxdnZram1haTBqbQ== "
+                                                target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+                                            <a href="https://github.com/GivenDdragon  " target="_blank"
+                                                title="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href="https://open.spotify.com/user/31nhhkff23ljmggueyeblmi3oym4"
+                                                target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
                                 <h3 class="footer-heading">About This Project</h3>
-                                <p class="about-project">This Spotify Dashboard was created as a collaborative project by our team to showcase our web development skills and passion for music. The application integrates with the Spotify API to display personalized music data and recommendations.</p>
+                                <p class="about-project">This Spotify Dashboard was created as a collaborative
+                                    project by our team to showcase our web development skills and passion for
+                                    music. The application integrates with the Spotify API to display personalized
+                                    music data and recommendations.</p>
                                 <div class="project-social-links">
                                     <a href="#" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
                                     <a href="#" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
@@ -752,11 +869,9 @@
                 <!-- Modal Edit Playlist -->
                 <div th:each="playlist : ${playlists}">
                     <div class="modal fade" th:id="'editPlaylistModal__' + ${playlist.id}" tabindex="-1"
-                        th:attr="aria-labelledby='editPlaylistModalLabel__' + ${playlist.id}"
-                        aria-hidden="true">
+                        th:attr="aria-labelledby='editPlaylistModalLabel__' + ${playlist.id}" aria-hidden="true">
                         <div class="modal-dialog">
-                            <form th:action="@{/spotify/playlists/update}" method="post"
-                                class="modal-content">
+                            <form th:action="@{/spotify/playlists/update}" method="post" class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title text-warning"
                                         th:id="'editPlaylistModalLabel__' + ${playlist.id}">
@@ -825,23 +940,29 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script th:src="@{/js/main.js}"></script>
     <script>
-        const container = document.getElementById('albumScroll');
-        const track = document.getElementById('albumTrack');
-        const scrollResetPoint = track.scrollWidth / 2;
-
-        container.addEventListener('scroll', () => {
-            if (container.scrollLeft >= scrollResetPoint) {
-                container.scrollLeft = 0;
+        document.addEventListener('DOMContentLoaded', function () {
+            // For album scroll
+            const albumContainer = document.getElementById('albumScroll');
+            const albumTrack = document.getElementById('albumTrack');
+            if (albumContainer && albumTrack) {
+                const albumResetPoint = albumTrack.scrollWidth / 2;
+                albumContainer.addEventListener('scroll', () => {
+                    if (albumContainer.scrollLeft >= albumResetPoint) {
+                        albumContainer.scrollLeft = 0;
+                    }
+                });
             }
-        });
 
-        const playlistContainer = document.getElementById('playlistScroll');
-        const playlistTrack = document.getElementById('playlistTrack');
-        const playlistResetPoint = playlistTrack.scrollWidth / 2;
-
-        playlistContainer.addEventListener('scroll', () => {
-            if (playlistContainer.scrollLeft >= playlistResetPoint) {
-                playlistContainer.scrollLeft = 0;
+            // For playlist scroll
+            const playlistContainer = document.getElementById('playlistScroll');
+            const playlistTrack = document.getElementById('playlistTrack');
+            if (playlistContainer && playlistTrack) {
+                const playlistResetPoint = playlistTrack.scrollWidth / 2;
+                playlistContainer.addEventListener('scroll', () => {
+                    if (playlistContainer.scrollLeft >= playlistResetPoint) {
+                        playlistContainer.scrollLeft = 0;
+                    }
+                });
             }
         });
     </script>
