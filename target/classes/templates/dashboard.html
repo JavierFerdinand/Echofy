@@ -7,38 +7,73 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+
     <link rel="icon" type="image/png" href="img/icon.png">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #121212;
             color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        body::-webkit-scrollbar,
-        .main-content::-webkit-scrollbar,
-        .album-scroll-container::-webkit-scrollbar {
-            display: none;
+        /* Layout Structure */
+        .app-container {
+            display: flex;
+            flex: 1;
+            padding-top: 60px; /* Space for navbar */
+        }
+
+        .sidebar-container {
+            width: 260px;
+            height: calc(100vh - 60px);
+            background-color: #121212;
+            position: fixed;
+            left: 0;
+            top: 60px;
+            overflow-y: auto;
+            padding: 20px 15px;
+            z-index: 900;
         }
 
         .main-content {
+            flex: 1;
+            margin-left: 260px;
             overflow-y: scroll;
-            height: 100vh;
+            height: calc(100vh - 60px);
             scrollbar-width: none;
             -ms-overflow-style: none;
             padding-bottom: 80px;
             background: linear-gradient(180deg, #1F1F1F 0%, #121212 100%);
+            position: relative;
+  z-index: 1; /* Pastikan konten muncul di atas elemen lain */
         }
 
-        .sidebar {
-            position: sticky;
+        /* Navbar styling */
+        .navbar {
+            position: fixed;
             top: 0;
-            height: 100vh;
-            overflow-y: auto;
-            background-color: #000000;
-            padding: 20px 10px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: #000000 !important;
+            height: 60px;
         }
 
+        /* Hide scrollbars */
+        body::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar,
+        .album-scroll-container::-webkit-scrollbar,
+        .sidebar-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Rest of your existing styles... */
         .song-container {
             background-color: #181818;
             border-radius: 6px;
@@ -221,16 +256,6 @@
             color: white;
         }
 
-        .nav-link {
-            color: #b3b3b3;
-            font-weight: 600;
-            padding: 8px 0;
-        }
-
-        .nav-link:hover {
-            color: white;
-        }
-
         .nav-link.active {
             color: white;
         }
@@ -250,6 +275,7 @@
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 32px;
+            
         }
 
         .artist-mix-card {
@@ -622,78 +648,15 @@
 </head>
 
 <body class="bg-dark text-white">
+    <!-- Navbar at the top -->
     <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-    <div class="d-flex">
-        <div class="sidebar col-md-2 d-none d-md-block">
-            <div class="d-flex flex-column h-100">
-                <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_CMYK_White.png"
-                    alt="Spotify" class="spotify-logo">
+    <div class="app-container">
+        <!-- Sidebar on the left -->
+        <div th:replace="fragments/sidebar :: sidebar(${playlists}, ${likedSongsCount},${followedArtist})"></div>
 
-                <div class="flex-grow-1">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                <i class="bi bi-house-door-fill me-3"></i>Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-search me-3"></i>Search
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="bi bi-collection me-3"></i>Your Library
-                            </a>
-                        </li>
-                    </ul>
-
-                    <div class="library-section">
-                        <h2>Your Library</h2>
-                        <div class="d-flex">
-                            <div class="flex-grow-1">
-                                <div class="library-item">Playlists</div>
-                                <div class="library-item">Artists</div>
-                            </div>
-                            <div>
-                                <i class="bi bi-plus-lg"></i>
-                            </div>
-                        </div>
-
-                        <div class="playlist-section">
-                            <div class="playlist-item">Playlist - JavierFerdinand</div>
-                            <div class="playlist-item">Chill day</div>
-                            <div class="playlist-item">Workday</div>
-                            <div class="playlist-item">Lagunya Nikí</div>
-                            <div class="playlist-item">sellconsepen</div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="library-section">
-                        <h2>Music</h2>
-                        <div class="playlist-item">Podcasts</div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="library-section">
-                        <h2>YouTube In My Heart</h2>
-                        <div class="playlist-item">Nadin Amizah</div>
-                        <div class="playlist-item">Virgoun Mix</div>
-                        <div class="playlist-item">Ariana Grande</div>
-                    </div>
-                </div>
-
-                <div class="footer-text">
-                    <p>Non-stop music based on your favorite songs and artists.</p>
-                </div>
-            </div>
-        </div>
-
-        <main class="flex-grow-1 ms-auto main-content">
+        <!-- Main content area -->
+        <main class="main-content">
             <div class="container-fluid p-4">
                 <h1 class="user-greeting">Welcome back, <span th:text="${user.display_name}"></span></h1>
 
@@ -706,8 +669,7 @@
                                     <img th:if="${album?.images} and ${not album.images.isEmpty()}"
                                         th:src="${album.images[0].url}" class="card-img-top" alt="Album Cover"
                                         onerror="this.src='https://via.placeholder.com/150'">
-                                    <div th:unless="${album?.images} and ${not album.images.isEmpty()}"
-                                        class="no-cover">
+                                    <div th:unless="${album?.images} and ${not album.images.isEmpty()}" class="no-cover">
                                         <span class="text-muted">No Cover</span>
                                     </div>
                                     <div class="card-body">
@@ -733,8 +695,8 @@
                                 <div class="card h-100">
                                     <!-- Gambar album -->
                                     <img th:if="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
-                                        th:src="${track.track.album.images[0].url}" class="card-img-top"
-                                        alt="Track Cover" onerror="this.src='https://via.placeholder.com/150'">
+                                        th:src="${track.track.album.images[0].url}" class="card-img-top" alt="Track Cover"
+                                        onerror="this.src='https://via.placeholder.com/150'">
 
                                     <!-- Fallback kalau tidak ada gambar -->
                                     <div th:unless="${track?.track?.album?.images != null and !track.track.album.images.isEmpty()}"
@@ -766,8 +728,6 @@
                         </div>
                     </div>
                 </section>
-
-
 
                 <section class="mb-5">
                     <div class="artist-mix-card">
@@ -805,8 +765,8 @@
                         <div class="album-scroll-track" id="playlistTrack">
                             <div class="album-card" th:each="playlist : ${playlists}">
                                 <div class="card h-100 d-flex flex-column justify-content-between">
-                                    <img th:if="${playlist.images}" th:src="${playlist.images[0].url}"
-                                        class="card-img-top" alt="Playlist">
+                                    <img th:if="${playlist.images}" th:src="${playlist.images[0].url}" class="card-img-top"
+                                        alt="Playlist">
                                     <div class="card-body">
                                         <h5 class="card-title text-truncate-2-lines mb-1" th:text="${playlist.name}">
                                         </h5>
@@ -862,8 +822,8 @@
                                             <span class="member-name">Desinta Dian Kusumaningrum (035)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
-                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/" target="_blank"
+                                                title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                                             <a href="https://www.instagram.com/diann_.an?igsh=cDAwNG5jYWVlazVn"
                                                 target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
                                             <a href="https://github.com/dysee-xian" target="_blank" title="GitHub"><i
@@ -878,8 +838,8 @@
                                             <span class="member-name">Della Ayu Nurlaili (041)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
-                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/" target="_blank"
+                                                title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                                             <a href="https://www.instagram.com/dellanrl" target="_blank"
                                                 title="Instagram"><i class="bi bi-instagram"></i></a>
                                             <a href="https://github.com/dellanrl" target="_blank" title="GitHub"><i
@@ -910,8 +870,8 @@
                                             <span class="member-name">Amelanov Destyawanda (092)</span>
                                         </div>
                                         <div class="member-social">
-                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
-                                                target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                                            <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/" target="_blank"
+                                                title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                                             <a href="https://www.instagram.com/meyaalav__?igsh=Y296OHV2NXFieDNx"
                                                 target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
                                             <a href="https://github.com/AmelanovDestyawanda" target="_blank"
@@ -930,8 +890,8 @@
                                                 target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                                             <a href="https://www.instagram.com/des_vect?igsh=MWN6eW1tZWl5cmt4Ng=="
                                                 target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href=" https://github.com/DestaBerlianda" target="_blank"
-                                                title="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href=" https://github.com/DestaBerlianda" target="_blank" title="GitHub"><i
+                                                    class="bi bi-github"></i></a>
                                             <a href="https://open.spotify.com/user/31op3olr324qzt2rqatcndrzia4a?si=t8vok51MQHOBFU5XqiTIVw "
                                                 target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
@@ -946,8 +906,8 @@
                                                 target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                                             <a href="https://www.instagram.com/gvenqt?igsh=MWtxdnZram1haTBqbQ== "
                                                 target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
-                                            <a href="https://github.com/GivenDdragon  " target="_blank"
-                                                title="GitHub"><i class="bi bi-github"></i></a>
+                                            <a href="https://github.com/GivenDdragon  " target="_blank" title="GitHub"><i
+                                                    class="bi bi-github"></i></a>
                                             <a href="https://open.spotify.com/user/31nhhkff23ljmggueyeblmi3oym4"
                                                 target="_blank" title="Spotify"><i class="bi bi-spotify"></i></a>
                                         </div>
@@ -991,13 +951,12 @@
                                     <input type="hidden" name="playlistId" th:value="${playlist.id}" />
                                     <div class="mb-3">
                                         <label class="form-label">Nama Baru</label>
-                                        <input type="text" class="form-control" name="newName"
-                                            th:value="${playlist.name}" required>
+                                        <input type="text" class="form-control" name="newName" th:value="${playlist.name}"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Batal</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                     <button type="submit" class="btn btn-warning">Simpan</button>
                                 </div>
                             </form>
@@ -1023,21 +982,20 @@
                                     <div class="mb-4">
                                         <label for="playlistName" class="form-label text-white-80 fw-medium mb-2">Nama
                                             Playlist</label>
-                                        <input type="text" class="form-control spotify-input" id="playlistName"
-                                            name="name" required placeholder="Masukkan nama playlist">
+                                        <input type="text" class="form-control spotify-input" id="playlistName" name="name"
+                                            required placeholder="Masukkan nama playlist">
                                     </div>
 
                                     <div class="mb-4">
                                         <label for="playlistDesc"
                                             class="form-label text-white-80 fw-medium mb-2">Deskripsi</label>
-                                        <textarea class="form-control spotify-input" id="playlistDesc"
-                                            name="description" rows="3"
-                                            placeholder="Tambahkan deskripsi (opsional)"></textarea>
+                                        <textarea class="form-control spotify-input" id="playlistDesc" name="description"
+                                            rows="3" placeholder="Tambahkan deskripsi (opsional)"></textarea>
                                     </div>
 
                                     <div class="form-check form-switch mb-4 d-flex align-items-center">
-                                        <input class="form-check-input spotify-switch" type="checkbox"
-                                            id="publicPlaylist" name="publicPlaylist">
+                                        <input class="form-check-input spotify-switch" type="checkbox" id="publicPlaylist"
+                                            name="publicPlaylist">
                                         <label class="form-check-label text-white-80 ms-2 fw-medium"
                                             for="publicPlaylist">Buat playlist publik</label>
                                     </div>
@@ -1065,36 +1023,38 @@
                     </div>
                 </div>
 
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script th:src="@{/js/main.js}"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // For album scroll
+                    const albumContainer = document.getElementById('albumScroll');
+                    const albumTrack = document.getElementById('albumTrack');
+                    if (albumContainer && albumTrack) {
+                        const albumResetPoint = albumTrack.scrollWidth / 2;
+                        albumContainer.addEventListener('scroll', () => {
+                            if (albumContainer.scrollLeft >= albumResetPoint) {
+                                albumContainer.scrollLeft = 0;
+                            }
+                        });
+                    }
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-                <script th:src="@{/js/main.js}"></script>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        // For album scroll
-                        const albumContainer = document.getElementById('albumScroll');
-                        const albumTrack = document.getElementById('albumTrack');
-                        if (albumContainer && albumTrack) {
-                            const albumResetPoint = albumTrack.scrollWidth / 2;
-                            albumContainer.addEventListener('scroll', () => {
-                                if (albumContainer.scrollLeft >= albumResetPoint) {
-                                    albumContainer.scrollLeft = 0;
-                                }
-                            });
-                        }
-
-                        // For playlist scroll
-                        const playlistContainer = document.getElementById('playlistScroll');
-                        const playlistTrack = document.getElementById('playlistTrack');
-                        if (playlistContainer && playlistTrack) {
-                            const playlistResetPoint = playlistTrack.scrollWidth / 2;
-                            playlistContainer.addEventListener('scroll', () => {
-                                if (playlistContainer.scrollLeft >= playlistResetPoint) {
-                                    playlistContainer.scrollLeft = 0;
-                                }
-                            });
-                        }
-                    });
-                </script>
+                    // For playlist scroll
+                    const playlistContainer = document.getElementById('playlistScroll');
+                    const playlistTrack = document.getElementById('playlistTrack');
+                    if (playlistContainer && playlistTrack) {
+                        const playlistResetPoint = playlistTrack.scrollWidth / 2;
+                        playlistContainer.addEventListener('scroll', () => {
+                            if (playlistContainer.scrollLeft >= playlistResetPoint) {
+                                playlistContainer.scrollLeft = 0;
+                            }
+                        });
+                    }
+                });
+            </script>
+        </main>
+    </div>
 </body>
 
 </html>

@@ -64,20 +64,22 @@ public class SpotifyController {
             Map<String, Object> user = spotifyService.getUserProfile(accessToken);
             Map<String, Object> playlists = spotifyService.getUserPlaylists(accessToken);
             List<Map<String, Object>> topTracks = spotifyService.getTopTracks(accessToken);
-            int likedSongsCount = spotifyService.getLikedSongsCount(accessToken);
             Map<String, Object> newReleases = spotifyService.getNewReleases(accessToken);
             List<Map<String, Object>> recentlyPlayed = spotifyService.getRecentlyPlayedTracks(accessToken);
+            List<Map<String, String>> followedArtists = spotifyService.getFollowedArtists(accessToken);
 
             Map<String, Object> albums = (Map<String, Object>) newReleases.get("albums");
             List<Map<String, Object>> albumItems = (List<Map<String, Object>>) albums.get("items");
+            
+
 
             model.addAttribute("user", user);
             model.addAttribute("playlists", playlists.get("items"));
-            model.addAttribute("likedSongsCount", likedSongsCount);
             model.addAttribute("topTracks", topTracks);
             model.addAttribute("token", accessToken);
             model.addAttribute("newReleases", albumItems);
             model.addAttribute("recentlyPlayed", recentlyPlayed);
+            model.addAttribute("followedArtists", followedArtists);
 
            
 
@@ -191,6 +193,11 @@ public String deletePlaylist(@RequestParam String playlistId, HttpSession sessio
         spotifyService.unfollowPlaylist(accessToken, playlistId);
     }
     return "redirect:/dashboard";
+}
+@GetMapping("/logout")
+public String logout(HttpSession session) {
+    session.invalidate(); // logout dari aplikasi kamu
+    return "logout"; // buka template HTML logout khusus
 }
 
 }

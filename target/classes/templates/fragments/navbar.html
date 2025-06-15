@@ -1,135 +1,225 @@
-
-<nav th:fragment="navbar" class="navbar navbar-dark bg-black px-3 py-2 shadow-sm" style="position: sticky; top: 0; z-index: 1000;">
-  <div class="container-fluid d-flex align-items-center justify-content-between">
-
-    <div class="d-flex align-items-center">
-      <a href="dashboard" class="me-3">
-        <img src="img/logoweb.png" alt="Logo" width="50" height="50" />
+<nav th:fragment="navbar" class="navbar navbar-dark px-3 py-2" style="background-color: #000000; position: fixed; top: 0; z-index: 1000;">
+  <div class="container-fluid d-flex align-items-center justify-content-between gap-3">
+    
+    <!-- Left: Logo and Navigation Arrows -->
+    <div class="d-flex align-items-center gap-4">
+      <!-- Navigation Arrows -->
+      <div class="d-flex gap-2">
+        <button class="btn btn-dark rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                style="width: 32px; height: 32px;" disabled>
+          <i class="bi bi-chevron-left fs-5"></i>
+        </button>
+        <button class="btn btn-dark rounded-circle p-2 d-flex align-items-center justify-content-center" 
+                style="width: 32px; height: 32px;" disabled>
+          <i class="bi bi-chevron-right fs-5"></i>
+        </button>
+      </div>
+      
+      <!-- Logo -->
+      <a href="dashboard" class="me-3 d-flex align-items-center text-decoration-none">
+        <img src="img/logoweb.png" alt="Logo" width="40" height="40" class="d-none d-sm-block"/>
+        <img src="img/logonavbar.png" alt="Logo" width="32" height="32" class="d-sm-none"/>
       </a>
-      <a href="dashboard" class="home-logo me-3" aria-label="Home">
-  <img src="img/logonavbar.png" alt="Logo" width="32" height="32" />
-</a>
     </div>
 
-    
-    <form
-      class="d-flex flex-grow-1 mx-3 position-relative"
-      action="/search"
-      method="get"
-      style="max-width: 600px;"
-      role="search"
-      aria-label="Site Search"
-    >
-      <input
-        type="search"
-        class="form-control search-input"
-        placeholder="What do you want to play?"
-        name="query"
-        aria-label="Search music, artists, playlists"
-        required
-      />
+    <!-- Center: Search Bar -->
+    <form class="d-flex flex-grow-1 mx-3 position-relative" action="/search" method="get" 
+          style="max-width: 600px;" role="search" aria-label="Site Search">
+      <input type="search" class="form-control search-input" placeholder="What do you want to play?" 
+             name="query" aria-label="Search music, artists, playlists" required />
       <button type="submit" class="btn search-btn" aria-label="Search">
-       <img src="img/logosearch.png" alt="Search" style="width:20px; height:20px;">
+        <i class="bi bi-search text-white"></i>
       </button>
     </form>
 
-   <!-- Kanan: Notifikasi, Teman, Profil -->
-<div class="d-flex align-items-center gap-3">
-  <a href="#" class="text-white" aria-label="Notifications"><i class="bi bi-bell fs-5"></i></a>
-  <a href="#" class="text-white" aria-label="Friends"><i class="bi bi-people fs-5"></i></a>
+    <!-- Right: User Controls -->
+    <div class="d-flex align-items-center gap-3">
+    
+      <!-- Notifications -->
+      <button class="btn btn-dark rounded-circle p-2 d-flex align-items-center justify-content-center" 
+              style="width: 32px; height: 32px;" aria-label="Notifications">
+        <i class="bi bi-bell fs-5"></i>
+      </button>
+      
+      <!-- Friends -->
+      <button class="btn btn-dark rounded-circle p-2 d-flex align-items-center justify-content-center" 
+              style="width: 32px; height: 32px;" aria-label="Friends">
+        <i class="bi bi-people fs-5"></i>
+      </button>
+      
+      <!-- User Profile with Hover Dropdown -->
+      <div class="profile-dropdown-container position-relative">
+        <button class="btn btn-dark d-flex align-items-center gap-2 p-1 profile-btn" 
+                style="background: transparent; border: none;">
+          <!-- Profile Image or Initial -->
+          <div class="profile-avatar">
+            <div th:if="${user.images != null and !user.images.isEmpty()}">
+              <img th:src="${user.images[0].url}" alt="Profile" class="rounded-circle" 
+                   style="width: 28px; height: 28px; object-fit: cover;">
+            </div>
+            <div th:unless="${user.images != null and !user.images.isEmpty()}" 
+                 class="rounded-circle bg-secondary d-flex align-items-center justify-content-center" 
+                 style="width: 28px; height: 28px;">
+              <span th:text="${user.display_name.substring(0,1)}" class="fw-bold"></span>
+            </div>
+          </div>
+          <span class="profile-name d-none d-lg-inline" th:text="${user.display_name}"></span>
+          <i class="bi bi-chevron-down profile-arrow"></i>
+        </button>
+        
+        <!-- Dropdown Content -->
+        <div class="profile-dropdown-content bg-dark text-white border rounded shadow-sm p-2"
+             style="position: absolute; top: 100%; right: 0; min-width: 200px; display: none; z-index: 1000;">
+          <div class="px-2 py-1 small text-muted" th:text="${user.display_name}"></div>
+          <div class="dropdown-divider border-secondary my-1"></div>
+          <a href="/account" class="dropdown-item text-decoration-none px-2 py-1 d-block">
+            <i class="bi bi-person me-2"></i> Account
+          </a>
+          <a href="/profile" class="dropdown-item text-decoration-none px-2 py-1 d-block">
+            <i class="bi bi-gear me-2"></i> Settings
+          </a>
+          <div class="dropdown-divider border-secondary my-1"></div>
+          <a href="#" onclick="logoutSpotify()" class="dropdown-item text-danger text-decoration-none px-2 py-1 d-block">
+  <i class="bi bi-box-arrow-right me-2"></i> Logout
+</a>
 
-  <!-- Profil: jika ada gambar -->
-  <div th:if="${user.images != null and !user.images.isEmpty()}" class="position-relative"
-       th:title="${user.display_name}">
-    <img th:src="${user.images[0].url}"
-         alt="Profile Image"
-         class="rounded-circle"
-         style="width: 32px; height: 32px; object-fit: cover; cursor: pointer;">
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Profil: fallback inisial -->
-  <div th:unless="${user.images != null and !user.images.isEmpty()}"
-       class="btn btn-dark rounded-circle text-white fw-bold d-flex align-items-center justify-content-center"
-       style="width: 32px; height: 32px; cursor: pointer;"
-       th:title="${user.display_name}">
-    <span th:text="${user.display_name.substring(0,1)}">U</span>
-  </div>
-</div>
-
-
+  <!-- Custom Styles -->
   <style>
-
-    .home-logo {
-  display: inline-block;
-  padding: 4px;
-  background-color: #282828;
-  border: 2px solid #282828;
-  border-radius: 50%;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-  cursor: pointer;
-}
-
-.home-logo:hover {
-  border-color: #1db954;
-  background-color: rgba(29, 185, 84, 0.15);
-  text-decoration: none;
-}
-
-/* Supaya gambar search di button pas dan tidak melar */
-.search-btn img {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-}
-
+    /* Search Bar Styling */
     .search-input {
-  width: 100%;
-  padding: 10px 45px 10px 20px;
-  border-radius: 50px;
-  border: 1.5px solid rgb(72, 70, 70);      /* border putih */
-  background-color: #282828;
-  color: #e0e0e0;                /* tulisan agak abu-abu terang */
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.search-input::placeholder {
-  color: #bbbbbb;               /* placeholder abu-abu terang */
-}
-.search-input:hover {
-  border-color: #c4cac6;
-  box-shadow: 0 0 6px 1.5px #adb2af;
-  color: white;
-}
-
-.search-input:focus {
-  outline: none;
-  box-shadow: 0 0 8px 2px #ffffff;
-  border-color: #f9f9f9;        /* border hijau saat fokus */
-  background-color: #121212;
-  color: white;                 /* tulisan jadi putih penuh saat fokus */
-}
-
+      width: 100%;
+      padding: 8px 40px 8px 16px;
+      border-radius: 20px;
+      border: none;
+      background-color: #242424;
+      color: white;
+      font-size: 0.875rem;
+    }
+    
+    .search-input::placeholder {
+      color: #a7a7a7;
+    }
+    
+    .search-input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px white;
+    }
+    
     .search-btn {
       position: absolute;
-      right: 5px;
+      right: 8px;
       top: 50%;
       transform: translateY(-50%);
-      background-color: #1db954;
+      background: none;
       border: none;
-      border-radius: 50%;
-      width: 35px;
-      height: 35px;
       color: white;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      z-index: 10;
     }
-
-    .search-btn:hover {
-      background-color: #1ed760;
+    
+    /* Upgrade Button */
+    .btn-upgrade {
+      border: 1px solid #878787;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-upgrade:hover {
+      border-color: white;
+      transform: scale(1.03);
+    }
+    
+    /* Profile Dropdown */
+    .profile-btn {
+      transition: all 0.2s ease;
+      border-radius: 23px;
+      padding: 2px;
+    }
+    
+    .profile-btn:hover {
+      background-color: #282828 !important;
+    }
+    
+    .profile-avatar {
+      transition: transform 0.2s ease;
+    }
+    
+    .profile-btn:hover .profile-avatar {
+      transform: scale(1.05);
+    }
+    
+    .profile-name {
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+    
+    .profile-arrow {
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+    
+    .profile-dropdown-container:hover .profile-arrow {
+      transform: rotate(180deg);
+    }
+    
+    .profile-dropdown-content {
+      animation: fadeIn 0.2s ease;
+    }
+    
+    .profile-dropdown-container:hover .profile-dropdown-content {
+      display: block !important;
+    }
+    
+    .dropdown-item {
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+      background-color: #3e3e3e;
+      color: white !important;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
+
+  <!-- JavaScript for Logout -->
+  <script>
+    function logoutSpotify() {
+    const newTab = window.open("https://accounts.spotify.com/logout", "_blank");
+    // Tunggu logout selesai, lalu tutup tab baru
+    setTimeout(() => {
+      if (newTab) newTab.close(); // hanya bisa kalau browser mengizinkan
+      window.location.href = "/"; // redirect tab saat ini ke home
+    }, 1000); // delay 1 detik
+  }
+  
+    // Add hover effect for profile dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+      const profileContainer = document.querySelector('.profile-dropdown-container');
+      
+      profileContainer.addEventListener('mouseenter', function() {
+        this.querySelector('.profile-dropdown-content').style.display = 'block';
+      });
+      
+      profileContainer.addEventListener('mouseleave', function() {
+        this.querySelector('.profile-dropdown-content').style.display = 'none';
+      });
+    });
+  </script>
 </nav>

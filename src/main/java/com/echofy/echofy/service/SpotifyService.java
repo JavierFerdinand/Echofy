@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -24,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 @Service
 public class SpotifyService {
 
@@ -38,15 +41,22 @@ public class SpotifyService {
 
     private final String authorizeUrl = "https://accounts.spotify.com/authorize";
     private final String tokenUrl = "https://accounts.spotify.com/api/token";
+    private final RestTemplate restTemplate;
+    
+    public SpotifyService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public String buildAuthorizeUrl() {
         return UriComponentsBuilder.fromHttpUrl(authorizeUrl)
                 .queryParam("client_id", clientId)
                 .queryParam("response_type", "code")
                 .queryParam("redirect_uri", redirectUri)
+                .queryParam("show_dialog", "true")
                 .queryParam("scope", String.join(" ",
                         "user-read-private",
                         "user-read-email",
+                        "user-follow-read",
                         "playlist-read-private",
                         "playlist-read-collaborative",
                         "ugc-image-upload",
@@ -104,20 +114,7 @@ public class SpotifyService {
         ).getBody();
     }
 
-    public Map<String, Object> getTopArtists(String accessToken) {
-        String url = "https://api.spotify.com/v1/me/top/artists?limit=10";
-        return makeSpotifyGetRequest(url, accessToken);
-    }
-
-    public int getLikedSongsCount(String accessToken) {
-        Map<String, Object> savedTracks = makeSpotifyGetRequest("https://api.spotify.com/v1/me/tracks?limit=1", accessToken);
-
-        if (savedTracks != null && savedTracks.get("items") instanceof List) {
-            return ((List<?>) savedTracks.get("items")).size();
-        }
-
-        return 0;
-    }
+  
 
     public List<Map<String, Object>> getTopTracks(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
@@ -276,6 +273,35 @@ public void updatePlaylistVisibility(String accessToken, String playlistId, bool
     RestTemplate restTemplate = new RestTemplate();
 
     restTemplate.exchange(url, HttpMethod.PUT, request, Void.class);
+}
+
+public List<Map<String, String>> getFollowedArtists(String accessToken) {
+    String url = "https://api.spotify.com/v1/me/following?type=artist&limit=20";
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(accessToken);
+    HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+    ResponseEntity<JsonNode> response = this.restTemplate.exchange(
+        url,
+        HttpMethod.GET,
+        entity,
+        JsonNode.class
+    );
+
+    JsonNode items = response.getBody().path("artists").path("items");
+
+    List<Map<String, String>> artists = new ArrayList<>();
+    for (JsonNode artistNode : items) {
+        Map<String, String> artist = new HashMap<>();
+        artist.put("name", artistNode.path("name").asText());
+        artist.put("image", artistNode.path("images").isArray() && artistNode.path("images").size() > 0
+                ? artistNode.path("images").get(0).path("url").asText()
+                : "https://via.placeholder.com/150");
+        artists.add(artist);
+    }
+
+    return artists;
 }
 
 

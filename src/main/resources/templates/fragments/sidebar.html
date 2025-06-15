@@ -1,59 +1,212 @@
-<!-- fragments/sidebar.html -->
-
-<div th:fragment="sidebar" class="fixed-sidebar p-3">
-  <div class="p-3 text-white bg-black">
-    <h6 class="fw-bold mb-3">Your Library</h6>
-
-    <!-- Tabs -->
-    <ul class="nav nav-pills mb-2" id="libraryTabs">
-      <li class="nav-item">
-        <button class="nav-link active btn-sm" data-bs-toggle="pill" data-bs-target="#playlists">Playlists</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link btn-sm" data-bs-toggle="pill" data-bs-target="#artists">Artists</button>
-      </li>
-    </ul>
-
-    <!-- Search -->
-    <input type="text" class="form-control form-control-sm bg-dark text-white border-0 mb-3" placeholder="Search Library">
-    <div class="sidebar-playlists">
-  <h3>Your Playlists</h3>
- 
-</div>
-
-    <!-- Dynamic Content -->
-    <div class="tab-content text-white" style="max-height: 60vh; overflow-y: auto;">
-      <div class="tab-pane fade show active" id="playlists">
-        <div id="playlistContainer">Loading playlists...</div>
+<div th:fragment="sidebar(playlists, likedSongsCount, followedArtist)" class="sidebar-container">
+  <!-- Library Header -->
+  <div class="library-header mb-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-collection-play-fill me-2"></i>
+        <h6 class="library-title m-0">Your Library</h6>
       </div>
-      <div class="tab-pane fade" id="artists">
-        <div id="artistContainer">Loading artists...</div>
-      </div>
+      <button class="btn btn-link p-0">
+        <i class="bi bi-plus-lg"></i>
+      </button>
+
+
+    </div>
+    
+    <!-- Updated Tab Buttons -->
+    <div class="button-group">
+      <button class="pill-btn">Playlists</button>
+      <button class="pill-btn">Artists</button>
     </div>
   </div>
 
-  <div class="bg-black text-white p-3 vh-100" style="width: 240px;">
-    <ul class="nav flex-column gap-3">
-      <li class="nav-item">
-        <a class="nav-link text-white d-flex align-items-center" href="/">
-          <i class="bi bi-house-door-fill me-2"></i> Home
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white d-flex align-items-center" href="/search">
-          <i class="bi bi-search me-2"></i> Search
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white d-flex align-items-center" href="/library">
-          <i class="bi bi-collection-play me-2"></i> Your Library
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white d-flex align-items-center" href="/liked">
-          <i class="bi bi-heart-fill me-2 text-danger"></i> Liked Songs
-        </a>
-      </li>
-    </ul>
+  <!-- Playlist Items -->
+  <div class="playlist-list">
+    <!-- Playlist Items -->
+    <div th:each="playlist, stat : ${playlists}" class="playlist-item d-flex align-items-center gap-2 px-2 py-1">
+      <img th:src="${playlist.images[0]?.url}" alt="Playlist Image" class="rounded"
+        style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/48'">
+      <div class="playlist-info d-flex flex-column justify-content-center overflow-hidden">
+        <h6 class="playlist-name text-white text-truncate mb-0" th:text="${playlist.name}">Playlist Name</h6>
+        <p class="playlist-meta text-truncate mb-0" th:text="'Playlist • ' + ${playlist.owner.display_name}">Playlist •
+          Owner</p>
+      </div>
+    </div>
+
+    <!-- Followed Artists -->
+    <div th:each="artist : ${followedArtists}" class="playlist-item d-flex align-items-center gap-2 px-2 py-1">
+      <img th:src="${artist.image}" alt="Artist" class="rounded-circle"
+        style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/48'">
+      <div class="playlist-info d-flex flex-column justify-content-center overflow-hidden">
+        <h6 class="playlist-name text-white text-truncate mb-0" th:text="${artist.name}">Artist Name</h6>
+        <p class="playlist-meta text-truncate mb-0">Artist</p>
+      </div>
+    </div>
   </div>
 </div>
+
+<style>
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background-color: #000000;
+    padding: 24px 16px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 24px;
+  }
+
+  .nav-item {
+    margin-bottom: 4px;
+  }
+
+  .nav-item.active {
+    background-color: #282828;
+    border-radius: 4px;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #b3b3b3;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .nav-item.active .nav-link,
+  .nav-link:hover {
+    color: white;
+  }
+
+  .nav-link i {
+    margin-right: 16px;
+    font-size: 20px;
+  }
+
+  .library-header {
+    padding: 4px 8px;
+  }
+
+  .library-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .playlist-filters {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    color: #b3b3b3;
+    margin-top: 12px;
+    padding: 4px 8px;
+  }
+
+  .filter-item {
+    cursor: pointer;
+    padding-bottom: 2px;
+  }
+
+  .filter-item.active {
+    color: white;
+    font-weight: 700;
+    border-bottom: 2px solid #1db954;
+  }
+
+  .playlist-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 8px;
+    padding: 0 8px;
+  }
+
+  .playlist-item {
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .playlist-item:hover {
+    background-color: #282828;
+  }
+
+  .playlist-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  .playlist-meta {
+    font-size: 12px;
+    color: #b3b3b3;
+    opacity: 0.8;
+  }
+
+  .liked-songs-section:hover {
+    transform: translateY(-2px);
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .card-text {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* Scrollbar */
+  .sidebar-container::-webkit-scrollbar,
+  .playlist-list::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sidebar-container::-webkit-scrollbar-thumb,
+  .playlist-list::-webkit-scrollbar-thumb {
+    background: #535353;
+    border-radius: 4px;
+  }
+
+  .sidebar-container::-webkit-scrollbar-track,
+  .playlist-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .button-group {
+    display: flex;
+    gap: 8px;
+    /* jarak antar tombol */
+  }
+
+  .pill-btn {
+    background-color: #2a2a2a !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 999px;
+    /* bentuk pill */
+    padding: 6px 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .pill-btn:hover {
+    background-color: #3a3a3a;
+  }
+</style>

@@ -1,0 +1,24 @@
+.button-group {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Tombol ala Spotify */
+.pill-btn {
+  all: unset; /* Reset semua gaya default button */
+  display: inline-block;
+  background-color: #2a2a2a;
+  color: white;
+  border-radius: 999px;
+  padding: 6px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+}
+
+.pill-btn:hover {
+  background-color: #3a3a3a;
+}

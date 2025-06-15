@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Hasil Pencarian</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,25 +14,25 @@
             --light-gray: #b3b3b3;
             --text-primary: #ffffff;
         }
-        
+
         body {
             background-color: var(--dark);
             color: var(--text-primary);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
         }
-        
+
         .container {
             max-width: 800px;
         }
-        
+
         h2 {
             font-weight: 700;
             color: var(--text-primary);
             position: relative;
             padding-bottom: 10px;
         }
-        
+
         h2::after {
             content: '';
             position: absolute;
@@ -42,7 +43,7 @@
             background: var(--primary);
             border-radius: 3px;
         }
-        
+
         .track-card {
             background-color: var(--dark-secondary);
             border-radius: 12px;
@@ -54,14 +55,14 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             border-left: 4px solid transparent;
         }
-        
+
         .track-card:hover {
             background-color: var(--dark-tertiary);
             transform: translateY(-3px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
             border-left: 4px solid var(--primary);
         }
-        
+
         .track-card img {
             border-radius: 8px;
             width: 80px;
@@ -71,28 +72,28 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease;
         }
-        
+
         .track-card:hover img {
             transform: scale(1.05);
         }
-        
+
         .track-info {
             flex-grow: 1;
         }
-        
+
         .track-name {
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 5px;
             color: var(--text-primary);
         }
-        
+
         .track-artist {
             color: var(--light-gray);
             font-size: 0.9rem;
             margin-bottom: 10px;
         }
-        
+
         audio {
             width: 100%;
             height: 40px;
@@ -100,17 +101,17 @@
             border-radius: 20px;
             filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
         }
-        
+
         audio::-webkit-media-controls-panel {
             background-color: var(--dark-tertiary);
             border-radius: 20px;
         }
-        
+
         audio::-webkit-media-controls-play-button,
         audio::-webkit-media-controls-mute-button {
             filter: invert(100%);
         }
-        
+
         .no-preview {
             background-color: rgba(255, 193, 7, 0.1);
             color: #ffc107;
@@ -120,12 +121,12 @@
             display: inline-flex;
             align-items: center;
         }
-        
+
         .no-preview i {
             margin-right: 5px;
             font-size: 0.9rem;
         }
-        
+
         .btn-back {
             background-color: transparent;
             color: var(--text-primary);
@@ -137,22 +138,22 @@
             display: inline-flex;
             align-items: center;
         }
-        
+
         .btn-back i {
             margin-right: 8px;
             transition: transform 0.3s ease;
         }
-        
+
         .btn-back:hover {
             background-color: var(--primary);
             color: var(--dark);
             transform: translateX(-5px);
         }
-        
+
         .btn-back:hover i {
             transform: translateX(-3px);
         }
-        
+
         .no-results {
             background-color: var(--dark-secondary);
             padding: 30px;
@@ -160,43 +161,91 @@
             text-align: center;
             margin-top: 30px;
         }
-        
+
         .no-results i {
             font-size: 3rem;
             color: var(--light-gray);
             margin-bottom: 20px;
         }
-        
+
         .no-results p {
             font-size: 1.1rem;
             color: var(--light-gray);
         }
-        
+
         .search-query {
             color: var(--primary);
             font-weight: 700;
         }
-        
+
+        /* New styles for sorting buttons */
+        .sorting-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sort-btn {
+            background-color: var(--dark-secondary);
+            color: var(--text-primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .sort-btn:hover {
+            background-color: var(--dark-tertiary);
+            transform: translateY(-2px);
+        }
+
+        .sort-btn.active {
+            background-color: var(--primary);
+            color: var(--dark);
+        }
+
         @media (max-width: 576px) {
             .track-card {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .track-card img {
                 margin-right: 0;
                 margin-bottom: 15px;
             }
-            
+
             audio {
                 width: 100%;
+            }
+
+            .sorting-buttons {
+                justify-content: center;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container py-5">
         <h2 class="mb-4">Hasil untuk: <span class="search-query" th:text="${query}"></span></h2>
+
+        <!-- Sorting buttons -->
+        <div class="sorting-buttons">
+            <a th:href="@{'/search?query=' + ${query} + '&type=track'}" class="sort-btn"
+                th:classappend="${type == 'track'} ? ' active'">
+                <i class="fas fa-music"></i> Tracks
+            </a>
+            <button class="sort-btn">
+                <i class="fas fa-list"></i> Playlists
+            </button>
+            <a th:href="@{'/search?query=' + ${query} + '&type=artist'}" class="sort-btn"
+                th:classappend="${type == 'artist'} ? ' active'">
+                <i class="fas fa-user"></i> Artists
+            </a>
+
+        </div>
 
         <div th:if="${#lists.isEmpty(tracks)}" class="no-results">
             <i class="fas fa-music"></i>
@@ -206,7 +255,7 @@
 
         <div th:each="track : ${tracks}" class="track-card">
             <img th:src="${(track.album.images != null and !#lists.isEmpty(track.album.images)) ? track.album.images[0].url : '/images/track-default.png'}"
-                 alt="Album Art" onerror="this.src='/images/track-default.png'">
+                alt="Album Art" onerror="this.src='/images/track-default.png'">
             <div class="track-info">
                 <div class="track-name" th:text="${track.name}">Judul Lagu</div>
                 <div class="track-artist" th:text="${#strings.listJoin(track.artists.![name], ', ')}">Artis</div>
@@ -228,14 +277,14 @@
 
     <script>
         // Add smooth fade-in animation for all track cards
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const cards = document.querySelectorAll('.track-card');
             cards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(20px)';
                 card.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.1}s`;
             });
-            
+
             // Add the keyframes dynamically
             const style = document.createElement('style');
             style.textContent = `
@@ -251,7 +300,19 @@
                 }
             `;
             document.head.appendChild(style);
+
+            // Add active class to clicked sorting button
+            const sortButtons = document.querySelectorAll('.sort-btn');
+            sortButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    sortButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    // Here you would add logic to sort/filter the results
+                    // based on the selected button (Tracks, Playlists, Artists)
+                });
+            });
         });
     </script>
 </body>
+
 </html>
