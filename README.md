@@ -3,13 +3,13 @@
 
 README ini berlaku untuk 7 anggota berikut:
 
-1. [Nama Anggota 1]
-2. [Nama Anggota 2]
-3. [Nama Anggota 3]
-4. [Nama Anggota 4]
-5. [Nama Anggota 5]
-6. [Nama Anggota 6]
-7. [Nama Anggota 7]
+1. Javier Ferdinand Bernadine (24111814041)
+2. Desinta Dian Kusuma N (24111814035)
+3. Della Ayu Nurlaili (24111814036)
+4. Muhammad Dzikri Azkia (24111814075)
+5. Amelanov Destyawanda (24111814092)
+6. Desta Berlianda Faathir (095)
+7. Given Dimas Ara Dea (24111814101)
 
 ---
 
