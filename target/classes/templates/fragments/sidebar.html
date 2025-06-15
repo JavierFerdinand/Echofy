@@ -1,4 +1,4 @@
-<div th:fragment="sidebar(playlists, likedSongsCount, followedArtist)" class="sidebar-container">
+<div th:fragment="sidebar(playlists, likedSongsCount, followedArtists)" class="sidebar-container">
   <!-- Library Header -->
   <div class="library-header mb-3">
     <div class="d-flex justify-content-between align-items-center">
@@ -6,37 +6,40 @@
         <i class="bi bi-collection-play-fill me-2"></i>
         <h6 class="library-title m-0">Your Library</h6>
       </div>
-      <button class="btn btn-link p-0">
+      <button class="btn btn-link p-0 rounded-circle bg-dark bg-opacity-50" 
+              data-bs-toggle="modal" data-bs-target="#addPlaylistModal">
         <i class="bi bi-plus-lg"></i>
       </button>
-
-
     </div>
-    
-    <!-- Updated Tab Buttons -->
-    <div class="button-group">
-      <button class="pill-btn">Playlists</button>
-      <button class="pill-btn">Artists</button>
+
+    <!-- Filter Buttons - Updated with scrollable container -->
+    <div class="button-group-container">
+      <div class="button-group-scroll">
+        <button class="pill-btn active" onclick="filterSidebar('all')">All</button>
+        <button class="pill-btn" onclick="filterSidebar('playlist')">Playlists</button>
+        <button class="pill-btn" onclick="filterSidebar('artist')">Artists</button>
+      </div>
     </div>
   </div>
 
-  <!-- Playlist Items -->
+  <!-- Playlist & Artist List -->
   <div class="playlist-list">
-    <!-- Playlist Items -->
-    <div th:each="playlist, stat : ${playlists}" class="playlist-item d-flex align-items-center gap-2 px-2 py-1">
+    <!-- Playlists -->
+    <div th:each="playlist : ${playlists}"
+         class="playlist-item playlist-type d-flex align-items-center gap-2 px-2 py-1">
       <img th:src="${playlist.images[0]?.url}" alt="Playlist Image" class="rounded"
-        style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/48'">
+           style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/48'">
       <div class="playlist-info d-flex flex-column justify-content-center overflow-hidden">
         <h6 class="playlist-name text-white text-truncate mb-0" th:text="${playlist.name}">Playlist Name</h6>
-        <p class="playlist-meta text-truncate mb-0" th:text="'Playlist • ' + ${playlist.owner.display_name}">Playlist •
-          Owner</p>
+        <p class="playlist-meta text-truncate mb-0" th:text="'Playlist • ' + ${playlist.owner.display_name}">Playlist • Owner</p>
       </div>
     </div>
 
-    <!-- Followed Artists -->
-    <div th:each="artist : ${followedArtists}" class="playlist-item d-flex align-items-center gap-2 px-2 py-1">
+    <!-- Artists -->
+    <div th:each="artist : ${followedArtists}"
+         class="playlist-item artist-type d-flex align-items-center gap-2 px-2 py-1">
       <img th:src="${artist.image}" alt="Artist" class="rounded-circle"
-        style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/48'">
+           style="width: 48px; height: 48px; object-fit: cover;" onerror="this.src='https://via.placeholder.com/48'">
       <div class="playlist-info d-flex flex-column justify-content-center overflow-hidden">
         <h6 class="playlist-name text-white text-truncate mb-0" th:text="${artist.name}">Artist Name</h6>
         <p class="playlist-meta text-truncate mb-0">Artist</p>

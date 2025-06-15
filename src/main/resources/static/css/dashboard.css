@@ -406,6 +406,7 @@ body::-webkit-scrollbar,
     display: flex;
     align-items: center;
     flex-grow: 1;
+    font-size: small;
 }
 
 .about-project {
@@ -628,5 +629,7 @@ body::-webkit-scrollbar,
     background-color: rgba(255, 255, 255, 0.1);
     border-color: #a0a0a0;
 }
+
+
 
 /* ========== END SPOTIFY MODAL STYLES ========== */

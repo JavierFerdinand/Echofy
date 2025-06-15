@@ -9,9 +9,15 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/sidebar.css}">
     <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    
 
-    <link rel="icon" type="image/png" href="img/icon.png"> 
+    <link rel="icon" type="image/png" href="img/icon.png">
+    
 </head>
+
+<script src="/js/sidebar.js"></script>
+<script src="/js/navbar.js"></script>
 
 <body class="bg-dark text-white">
     <!-- Navbar at the top -->
@@ -19,7 +25,7 @@
 
     <div class="app-container">
         <!-- Sidebar on the left -->
-        <div th:replace="fragments/sidebar :: sidebar(${playlists}, ${likedSongsCount},${followedArtist})"></div>
+        <div th:replace="fragments/sidebar :: sidebar(${playlists}, ${likedSongsCount},${followedArtists})"></div>
 
         <!-- Main content area -->
         <main class="main-content">
@@ -186,7 +192,7 @@
                                     <li>
                                         <div class="member-info">
                                             <span class="member-number">2</span>
-                                            <span class="member-name">Desinta Dian Kusumaningrum (035)</span>
+                                            <span class="member-name">Desinta Dian Kusuma N (035)</span>
                                         </div>
                                         <div class="member-social">
                                             <a href="https://www.linkedin.com/in/della-nurlailli-6018a1336/"
@@ -299,131 +305,125 @@
                         </div>
                     </div>
                 </footer>
-
-                <!-- Modal Edit Playlist -->
-                <div th:each="playlist : ${playlists}">
-                    <div class="modal fade" th:id="'editPlaylistModal__' + ${playlist.id}" tabindex="-1"
-                        th:attr="aria-labelledby='editPlaylistModalLabel__' + ${playlist.id}" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form th:action="@{/spotify/playlists/update}" method="post" class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-warning"
-                                        th:id="'editPlaylistModalLabel__' + ${playlist.id}">
-                                        Edit Nama Playlist
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="playlistId" th:value="${playlist.id}" />
-                                    <div class="mb-3">
-                                        <label class="form-label">Nama Baru</label>
-                                        <input type="text" class="form-control" name="newName"
-                                            th:value="${playlist.name}" required>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-warning">Simpan</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
-            
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-            <script th:src="@{/js/main.js}"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // For album scroll
-                    const albumContainer = document.getElementById('albumScroll');
-                    const albumTrack = document.getElementById('albumTrack');
-                    if (albumContainer && albumTrack) {
-                        const albumResetPoint = albumTrack.scrollWidth / 2;
-                        albumContainer.addEventListener('scroll', () => {
-                            if (albumContainer.scrollLeft >= albumResetPoint) {
-                                albumContainer.scrollLeft = 0;
-                            }
-                        });
-                    }
+    </div>
 
-                    // For playlist scroll
-                    const playlistContainer = document.getElementById('playlistScroll');
-                    const playlistTrack = document.getElementById('playlistTrack');
-                    if (playlistContainer && playlistTrack) {
-                        const playlistResetPoint = playlistTrack.scrollWidth / 2;
-                        playlistContainer.addEventListener('scroll', () => {
-                            if (playlistContainer.scrollLeft >= playlistResetPoint) {
-                                playlistContainer.scrollLeft = 0;
-                            }
-                        });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // For album scroll
+            const albumContainer = document.getElementById('albumScroll');
+            const albumTrack = document.getElementById('albumTrack');
+            if (albumContainer && albumTrack) {
+                const albumResetPoint = albumTrack.scrollWidth / 2;
+                albumContainer.addEventListener('scroll', () => {
+                    if (albumContainer.scrollLeft >= albumResetPoint) {
+                        albumContainer.scrollLeft = 0;
                     }
                 });
-            </script>
-        </main>
-        <!-- Modal for adding a new playlist -->
-                <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content spotify-modal">
-                            <form th:action="@{/spotify/playlists/add}" method="post" enctype="multipart/form-data">
-                                <div class="modal-header spotify-modal-header">
-                                    <h5 class="modal-title text-spotify-green fw-bold" id="addPlaylistModalLabel">
-                                        <i class="bi bi-plus-circle-fill me-2"></i>Buat Playlist Baru
-                                    </h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
+            }
 
-                                <div class="modal-body">
-                                    <div class="mb-4">
-                                        <label for="playlistName" class="form-label text-white-80 fw-medium mb-2">Nama
-                                            Playlist</label>
-                                        <input type="text" class="form-control spotify-input" id="playlistName"
-                                            name="name" required placeholder="Masukkan nama playlist">
-                                    </div>
+            // For playlist scroll
+            const playlistContainer = document.getElementById('playlistScroll');
+            const playlistTrack = document.getElementById('playlistTrack');
+            if (playlistContainer && playlistTrack) {
+                const playlistResetPoint = playlistTrack.scrollWidth / 2;
+                playlistContainer.addEventListener('scroll', () => {
+                    if (playlistContainer.scrollLeft >= playlistResetPoint) {
+                        playlistContainer.scrollLeft = 0;
+                    }
+                });
+            }
+        });
+    </script>
+    </main>
 
-                                    <div class="mb-4">
-                                        <label for="playlistDesc"
-                                            class="form-label text-white-80 fw-medium mb-2">Deskripsi</label>
-                                        <textarea class="form-control spotify-input" id="playlistDesc"
-                                            name="description" rows="3"
-                                            placeholder="Tambahkan deskripsi (opsional)"></textarea>
-                                    </div>
+        <div th:each="playlist : ${playlists}">
+            <div class="modal fade" th:id="'editPlaylistModal__' + ${playlist.id}" tabindex="-1"
+                th:attr="aria-labelledby='editPlaylistModalLabel__' + ${playlist.id}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form th:action="@{/spotify/playlists/update}" method="post" class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title text-warning" th:id="'editPlaylistModalLabel__' + ${playlist.id}">
+                                Edit Nama Playlist
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="playlistId" th:value="${playlist.id}" />
+                            <div class="mb-3">
+                                <label class="form-label">Nama Baru</label>
+                                <input type="text" class="form-control" name="newName" th:value="${playlist.name}"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-warning">Simpan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                                    <div class="form-check form-switch mb-4 d-flex align-items-center">
-                                        <input class="form-check-input spotify-switch" type="checkbox"
-                                            id="publicPlaylist" name="publicPlaylist">
-                                        <label class="form-check-label text-white-80 ms-2 fw-medium"
-                                            for="publicPlaylist">Buat playlist publik</label>
-                                    </div>
+    <!-- Modal for adding a new playlist -->
+    <div class="modal fade" id="addPlaylistModal" tabindex="-1" aria-labelledby="addPlaylistModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content spotify-modal">
+                <form th:action="@{/spotify/playlists/add}" method="post" enctype="multipart/form-data">
+                    <div class="modal-header spotify-modal-header">
+                        <h5 class="modal-title text-spotify-green fw-bold" id="addPlaylistModalLabel">
+                            <i class="bi bi-plus-circle-fill me-2"></i>Buat Playlist Baru
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
 
-                                    <div class="mb-3">
-                                        <label for="coverImage" class="form-label text-white-80 fw-medium mb-2">Cover
-                                            Playlist</label>
-                                        <div class="spotify-file-input">
-                                            <input class="form-control" type="file" id="coverImage" name="coverImage"
-                                                accept="image/jpeg">
-                                            <div class="file-input-label">Unggah gambar (JPEG, maks. 5MB)</div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="modal-body">
+                        <div class="mb-4">
+                            <label for="playlistName" class="form-label text-white-80 fw-medium mb-2">Nama
+                                Playlist</label>
+                            <input type="text" class="form-control spotify-input" id="playlistName" name="name" required
+                                placeholder="Masukkan nama playlist">
+                        </div>
 
-                                <div class="modal-footer spotify-modal-footer">
-                                    <button type="button" class="btn btn-outline-light spotify-btn-cancel"
-                                        data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-spotify-green fw-bold">
-                                        <i class="bi bi-music-note-beamed me-2"></i> Simpan Playlist
-                                    </button>
-                                </div>
-                            </form>
+                        <div class="mb-4">
+                            <label for="playlistDesc" class="form-label text-white-80 fw-medium mb-2">Deskripsi</label>
+                            <textarea class="form-control spotify-input" id="playlistDesc" name="description" rows="3"
+                                placeholder="Tambahkan deskripsi (opsional)"></textarea>
+                        </div>
+
+                        <div class="form-check form-switch mb-4 d-flex align-items-center">
+                            <input class="form-check-input spotify-switch" type="checkbox" id="publicPlaylist"
+                                name="publicPlaylist">
+                            <label class="form-check-label text-white-80 ms-2 fw-medium" for="publicPlaylist">Buat
+                                playlist publik</label>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="coverImage" class="form-label text-white-80 fw-medium mb-2">Cover
+                                Playlist</label>
+                            <div class="spotify-file-input">
+                                <input class="form-control" type="file" id="coverImage" name="coverImage"
+                                    accept="image/jpeg">
+                                <div class="file-input-label">Unggah gambar (JPEG, maks. 5MB)</div>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <div class="modal-footer spotify-modal-footer">
+                        <button type="button" class="btn btn-outline-light spotify-btn-cancel"
+                            data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-spotify-green fw-bold">
+                            <i class="bi bi-music-note-beamed me-2"></i> Simpan Playlist
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     </div>
 </body>
 

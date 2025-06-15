@@ -1,16 +1,17 @@
 .sidebar-container {
-  width: 260px;
-  height: calc(93vh - 60px);
-  position: relative; /* ini penting */
-  top: auto;
-  left: auto;
-  margin: 0;
-  padding: 24px 16px;
-  background-color: #121212;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  border-radius: 12px;
+    width: 260px;
+    height: calc(93vh - 60px);
+    position: relative;
+    /* ini penting */
+    top: auto;
+    left: auto;
+    margin: 0;
+    padding: 24px 16px;
+    background-color: #121212;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
 }
 
 
@@ -142,7 +143,7 @@
 }
 
 .sidebar-container:hover {
-  box-shadow: 0 0 20px #A9A9A9;
+    box-shadow: 0 0 20px #A9A9A9;
 }
 
 .button-group {
@@ -169,4 +170,67 @@
 
 .pill-btn:hover {
     background-color: #3a3a3a;
+
+
+}
+
+.pill-btn.active {
+    background-color: #1DB954;
+    color: black;
+    font-weight: 700;
+    transform: scale(1.05);
+    transition: all 0.2s ease;
+}
+
+/* Ganti atau tambahkan CSS untuk button group */
+.button-group-container {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    margin-top: 10px;
+    scrollbar-width: none;
+    /* Untuk Firefox */
+}
+
+.button-group-container::-webkit-scrollbar {
+    display: none;
+    /* Untuk Chrome/Safari */
+}
+
+.button-group-scroll {
+    display: inline-flex;
+    gap: 8px;
+    padding-right: 16px;
+    /* Memberi ruang untuk scroll */
+    min-width: max-content;
+    /* Memastikan konten tidak wrap */
+}
+
+.pill-btn {
+    all: unset;
+    display: inline-block;
+    background-color: #2a2a2a;
+    color: white;
+    border-radius: 999px;
+    padding: 6px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+    /* Mencegah text wrapping */
+    flex-shrink: 0;
+    /* Mencegah button mengecil */
+}
+
+.pill-btn:hover {
+    background-color: #3a3a3a;
+}
+
+.pill-btn.active {
+    background-color: #1DB954;
+    color: black;
+    font-weight: 700;
+    transform: scale(1.05);
 }

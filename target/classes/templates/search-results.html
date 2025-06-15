@@ -2,317 +2,774 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Hasil Pencarian</title>
+    <meta charset="UTF-8" />
+    <title>Search Results</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Circular,Helvetica,Arial,sans-serif" rel="stylesheet">
+
     <style>
         :root {
-            --primary: #1db954;
-            --dark: #121212;
-            --dark-secondary: #181818;
-            --dark-tertiary: #282828;
-            --light-gray: #b3b3b3;
-            --text-primary: #ffffff;
+            --spotify-green: #1DB954;
+            --spotify-black: #191414;
+            --dark-bg: #121212;
+            --dark-elevated: #181818;
+            --dark-hover: #282828;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-tertiary: #535353;
+            --divider: #2A2A2A;
+            --gradient: linear-gradient(135deg, #2D46B9 0%, #1DB954 100%);
         }
 
         body {
-            background-color: var(--dark);
+            background-color: var(--dark-bg);
             color: var(--text-primary);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Circular', 'Helvetica', 'Arial', sans-serif;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
+            padding: 32px;
         }
 
-        h2 {
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 28px;
             font-weight: 700;
             color: var(--text-primary);
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 3px;
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        .track-card {
-            background-color: var(--dark-secondary);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
+            text-decoration: none;
             display: flex;
             align-items: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-left: 4px solid transparent;
+            gap: 8px;
         }
 
-        .track-card:hover {
-            background-color: var(--dark-tertiary);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-            border-left: 4px solid var(--primary);
+        .logo span {
+            color: var(--spotify-green);
         }
 
-        .track-card img {
-            border-radius: 8px;
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            margin-right: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease;
+        .logo-icon {
+            color: var(--spotify-green);
+            font-size: 32px;
         }
 
-        .track-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .track-info {
-            flex-grow: 1;
-        }
-
-        .track-name {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
+        .search-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
             color: var(--text-primary);
-        }
-
-        .track-artist {
-            color: var(--light-gray);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-
-        audio {
-            width: 100%;
-            height: 40px;
-            margin-top: 5px;
-            border-radius: 20px;
-            filter: sepia(20%) saturate(70%) grayscale(1) contrast(99%) invert(12%);
-        }
-
-        audio::-webkit-media-controls-panel {
-            background-color: var(--dark-tertiary);
-            border-radius: 20px;
-        }
-
-        audio::-webkit-media-controls-play-button,
-        audio::-webkit-media-controls-mute-button {
-            filter: invert(100%);
-        }
-
-        .no-preview {
-            background-color: rgba(255, 193, 7, 0.1);
-            color: #ffc107;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .no-preview i {
-            margin-right: 5px;
-            font-size: 0.9rem;
-        }
-
-        .btn-back {
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 2px solid var(--primary);
-            border-radius: 30px;
-            padding: 8px 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .btn-back i {
-            margin-right: 8px;
-            transition: transform 0.3s ease;
-        }
-
-        .btn-back:hover {
-            background-color: var(--primary);
-            color: var(--dark);
-            transform: translateX(-5px);
-        }
-
-        .btn-back:hover i {
-            transform: translateX(-3px);
-        }
-
-        .no-results {
-            background-color: var(--dark-secondary);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .no-results i {
-            font-size: 3rem;
-            color: var(--light-gray);
-            margin-bottom: 20px;
-        }
-
-        .no-results p {
-            font-size: 1.1rem;
-            color: var(--light-gray);
         }
 
         .search-query {
-            color: var(--primary);
+            color: var(--spotify-green);
             font-weight: 700;
         }
 
-        /* New styles for sorting buttons */
-        .sorting-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+        /* Search Form - New Improved Version */
+        .search-container {
+            margin-bottom: 32px;
         }
 
-        .sort-btn {
-            background-color: var(--dark-secondary);
-            color: var(--text-primary);
+        .search-form {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        .search-input {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
             border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
+            border-radius: 500px;
+            color: var(--text-primary);
+            padding: 14px 20px 14px 48px;
+            font-size: 16px;
+            height: 56px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .search-input:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 2px var(--spotify-green);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 18px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .sort-select {
+            width: 200px;
+        }
+
+        .sort-select .form-select {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 500px;
+            color: var(--text-primary);
+            padding: 14px 24px;
+            font-size: 14px;
+            height: 56px;
+            font-weight: 500;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%231DB954' d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 16px 12px;
+        }
+
+        .sort-select .form-select:focus {
+            box-shadow: 0 0 0 2px var(--spotify-green);
+        }
+
+        .sort-select .form-select option {
+            background-color: var(--dark-elevated);
+            color: var(--text-primary);
+        }
+
+        /* Results Grid */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .results-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .track-card {
+            background-color: var(--dark-elevated);
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .track-card:hover {
+            background-color: var(--dark-hover);
+            transform: translateY(-4px);
+        }
+
+        .track-card.playing {
+            background-color: rgba(29, 185, 84, 0.1);
+            box-shadow: 0 0 0 1px var(--spotify-green);
+        }
+
+        .track-image {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .track-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .track-artist {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .play-button {
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            width: 48px;
+            height: 48px;
+            background-color: var(--spotify-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: none;
+            color: var(--text-primary);
+        }
+
+        .track-card:hover .play-button {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .play-button.playing {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .play-button i {
+            font-size: 18px;
+            margin-left: 2px;
+        }
+
+        /* Audio Player */
+        .audio-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--dark-elevated);
+            border-top: 1px solid var(--divider);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            z-index: 1000;
+        }
+
+        .now-playing {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 200px;
+        }
+
+        .now-playing-image {
+            width: 56px;
+            height: 56px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .now-playing-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .now-playing-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .now-playing-artist {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .audio-controls {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .player-buttons {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .player-button {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-button:hover {
+            color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .player-button.play-pause {
+            background-color: var(--text-primary);
+            color: var(--dark-bg);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .player-button.play-pause:hover {
+            transform: scale(1.05);
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background-color: var(--text-tertiary);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--text-secondary);
+            border-radius: 2px;
+            position: relative;
+            transition: width 0.1s linear;
+        }
+
+        .progress-handle {
+            width: 12px;
+            height: 12px;
+            background-color: var(--text-primary);
+            border-radius: 50%;
+            position: absolute;
+            right: -6px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .progress-bar:hover .progress-handle {
+            opacity: 1;
+        }
+
+        .progress-bar:hover .progress {
+            background-color: var(--spotify-green);
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            color: var(--text-tertiary);
+            margin-bottom: 24px;
+            opacity: 0.8;
+        }
+
+        .empty-state-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .empty-state-text {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .btn-spotify {
+            background-color: var(--spotify-green);
+            border: none;
+            border-radius: 500px;
+            padding: 12px 40px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 14px;
             transition: all 0.3s ease;
         }
 
-        .sort-btn:hover {
-            background-color: var(--dark-tertiary);
-            transform: translateY(-2px);
+        .btn-spotify:hover {
+            background-color: #1ed760;
+            transform: scale(1.03);
         }
 
-        .sort-btn.active {
-            background-color: var(--primary);
-            color: var(--dark);
-        }
+        ::-webkit-scrollbar {
+    display: none;
+}
 
-        @media (max-width: 576px) {
-            .track-card {
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+
+            .header {
                 flex-direction: column;
-                text-align: center;
+                align-items: flex-start;
+                gap: 16px;
+                margin-bottom: 24px;
             }
 
-            .track-card img {
-                margin-right: 0;
-                margin-bottom: 15px;
+            .search-form {
+                flex-direction: column;
+                gap: 12px;
             }
 
-            audio {
+            .search-wrapper {
+                max-width: 100%;
                 width: 100%;
             }
 
-            .sorting-buttons {
-                justify-content: center;
+            .sort-select {
+                width: 100%;
+            }
+
+            .results-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 16px;
+            }
+
+            .audio-container {
+                padding: 12px 16px;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .now-playing {
+                width: 100%;
+            }
+
+            .progress-container {
+                width: 100%;
             }
         }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .track-card {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .track-card:nth-child(1) { animation-delay: 0.1s; }
+        .track-card:nth-child(2) { animation-delay: 0.2s; }
+        .track-card:nth-child(3) { animation-delay: 0.3s; }
+        .track-card:nth-child(4) { animation-delay: 0.4s; }
+        .track-card:nth-child(5) { animation-delay: 0.5s; }
     </style>
 </head>
 
 <body>
-    <div class="container py-5">
-        <h2 class="mb-4">Hasil untuk: <span class="search-query" th:text="${query}"></span></h2>
-
-        <!-- Sorting buttons -->
-        <div class="sorting-buttons">
-            <a th:href="@{'/search?query=' + ${query} + '&type=track'}" class="sort-btn"
-                th:classappend="${type == 'track'} ? ' active'">
-                <i class="fas fa-music"></i> Tracks
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <a href="/dashboard" class="logo">
+                <i class="fas fa-music logo-icon"></i>
+                Echo<span>fy</span>
             </a>
-            <button class="sort-btn">
-                <i class="fas fa-list"></i> Playlists
-            </button>
-            <a th:href="@{'/search?query=' + ${query} + '&type=artist'}" class="sort-btn"
-                th:classappend="${type == 'artist'} ? ' active'">
-                <i class="fas fa-user"></i> Artists
-            </a>
+            <h1 class="search-title">Results for "<span class="search-query" th:text="${query}">query</span>"</h1>
+        </header>
 
+        <!-- Search Container -->
+        <div class="search-container">
+            <form th:action="@{/search}" method="get" class="search-form">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" name="query" th:value="${query}" 
+                           placeholder="What do you want to listen to?" aria-label="Search">
+                </div>
+
+                <div class="sort-select">
+                    <select name="sort" class="form-select" onchange="this.form.submit()">
+                        <option value="" th:selected="${sort == null}">Sort by</option>
+                        <option value="popularityDesc" th:selected="${sort == 'popularityDesc'}">Most popular</option>
+                        <option value="popularityAsc" th:selected="${sort == 'popularityAsc'}">Least popular</option>
+                    </select>
+                </div>
+            </form>
         </div>
 
-        <div th:if="${#lists.isEmpty(tracks)}" class="no-results">
-            <i class="fas fa-music"></i>
-            <p>Maaf, kami tidak menemukan hasil untuk "<span class="search-query" th:text="${query}"></span>"</p>
-            <a href="/dashboard" class="btn btn-outline-light mt-2">Coba pencarian lain</a>
-        </div>
+        <!-- Results Grid -->
+        <div th:if="${tracks != null and !#lists.isEmpty(tracks)}">
+            <div class="results-header">
+                <h2 class="search-title">Songs</h2>
+                <div class="results-count" th:text="${#lists.size(tracks) + ' results'}">X results</div>
+            </div>
+            
+            <div class="results-grid">
+                <div th:each="track : ${tracks}" class="track-card" data-track-id="${track.id}">
+                    <img th:src="${(track.album.images != null and !#lists.isEmpty(track.album.images)) ? track.album.images[0].url : 'https://i.scdn.co/image/ab6761610000e5ebd642648235ebf3460d2d1f6a'}"
+                        class="track-image" alt="Album cover">
+                    <h3 class="track-title" th:text="${track.name}">Track name</h3>
+                    <p class="track-artist" th:text="${#strings.listJoin(track.artists.![name], ', ')}">Artist name</p>
 
-        <div th:each="track : ${tracks}" class="track-card">
-            <img th:src="${(track.album.images != null and !#lists.isEmpty(track.album.images)) ? track.album.images[0].url : '/images/track-default.png'}"
-                alt="Album Art" onerror="this.src='/images/track-default.png'">
-            <div class="track-info">
-                <div class="track-name" th:text="${track.name}">Judul Lagu</div>
-                <div class="track-artist" th:text="${#strings.listJoin(track.artists.![name], ', ')}">Artis</div>
-                <audio th:src="${track.preview_url}" controls th:if="${track.preview_url != null}"></audio>
-                <div th:if="${track.preview_url == null}" class="no-preview">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <span>Tidak ada preview tersedia</span>
+                    <button class="play-button" data-preview-url="${track.preview_url}">
+                        <i class="fas fa-play"></i>
+                    </button>
+
+                    <audio th:if="${track.preview_url != null}" th:src="${track.preview_url}" preload="none"></audio>
                 </div>
             </div>
         </div>
 
-        <div class="text-center mt-5">
-            <a href="/dashboard" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-                Kembali ke Dashboard
+        <!-- Empty State -->
+        <div th:if="${#lists.isEmpty(tracks)}" class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h2 class="empty-state-title">No results found</h2>
+            <p class="empty-state-text">We couldn't find any matches for "<span class="search-query"
+                    th:text="${query}"></span>". Try searching for something else.</p>
+            <a href="/dashboard" class="btn btn-spotify">
+                Back to Home
             </a>
         </div>
     </div>
 
+    <!-- Audio Player -->
+    <div class="audio-container" style="display: none;">
+        <div class="now-playing">
+            <img src="" class="now-playing-image" alt="Now playing">
+            <div class="now-playing-info">
+                <div class="now-playing-title">No track selected</div>
+                <div class="now-playing-artist"></div>
+            </div>
+        </div>
+
+        <div class="audio-controls">
+            <div class="player-buttons">
+                <button class="player-button"><i class="fas fa-random"></i></button>
+                <button class="player-button"><i class="fas fa-step-backward"></i></button>
+                <button class="player-button play-pause"><i class="fas fa-play"></i></button>
+                <button class="player-button"><i class="fas fa-step-forward"></i></button>
+                <button class="player-button"><i class="fas fa-redo"></i></button>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" style="width: 0%">
+                        <div class="progress-handle"></div>
+                    </div>
+                </div>
+                <div class="time-display">
+                    <span class="current-time">0:00</span>
+                    <span class="duration">0:30</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // Add smooth fade-in animation for all track cards
         document.addEventListener('DOMContentLoaded', function () {
-            const cards = document.querySelectorAll('.track-card');
-            cards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                card.style.animation = `fadeInUp 0.5s ease forwards ${index * 0.1}s`;
+            const audioPlayer = document.querySelector('.audio-container');
+            const playPauseBtn = document.querySelector('.play-pause');
+            const nowPlayingImg = document.querySelector('.now-playing-image');
+            const nowPlayingTitle = document.querySelector('.now-playing-title');
+            const nowPlayingArtist = document.querySelector('.now-playing-artist');
+            const progressBar = document.querySelector('.progress-bar');
+            const progress = document.querySelector('.progress');
+            const currentTimeEl = document.querySelector('.current-time');
+            const durationEl = document.querySelector('.duration');
+
+            let currentAudio = null;
+            let isPlaying = false;
+            let isDragging = false;
+
+            // Format time (seconds to MM:SS)
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Play track
+            function playTrack(card) {
+                // Stop current audio if playing
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio.currentTime = 0;
+                    document.querySelectorAll('.track-card.playing').forEach(c => c.classList.remove('playing'));
+                    document.querySelectorAll('.play-button.playing').forEach(b => {
+                        b.innerHTML = '<i class="fas fa-play"></i>';
+                        b.classList.remove('playing');
+                    });
+                }
+
+                const audio = card.querySelector('audio');
+                if (!audio) return;
+
+                // Update now playing info
+                const img = card.querySelector('.track-image').src;
+                const title = card.querySelector('.track-title').textContent;
+                const artist = card.querySelector('.track-artist').textContent;
+
+                nowPlayingImg.src = img;
+                nowPlayingTitle.textContent = title;
+                nowPlayingArtist.textContent = artist;
+                audioPlayer.style.display = 'flex';
+
+                // Play audio
+                currentAudio = audio;
+                audio.play();
+                isPlaying = true;
+
+                // Update UI
+                card.classList.add('playing');
+                const playBtn = card.querySelector('.play-button');
+                playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                playBtn.classList.add('playing');
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+
+                // Set duration
+                audio.addEventListener('loadedmetadata', function () {
+                    durationEl.textContent = formatTime(audio.duration);
+                });
+
+                // Update progress bar
+                audio.addEventListener('timeupdate', function () {
+                    if (!isDragging) {
+                        const progressPercent = (audio.currentTime / audio.duration) * 100;
+                        progress.style.width = `${progressPercent}%`;
+                        currentTimeEl.textContent = formatTime(audio.currentTime);
+                    }
+                });
+
+                // Handle audio end
+                audio.addEventListener('ended', function () {
+                    progress.style.width = '0%';
+                    currentTimeEl.textContent = '0:00';
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    card.classList.remove('playing');
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    playBtn.classList.remove('playing');
+                    isPlaying = false;
+                });
+            }
+
+            // Play/pause button click
+            playPauseBtn.addEventListener('click', function () {
+                if (!currentAudio) return;
+
+                if (isPlaying) {
+                    currentAudio.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    document.querySelector('.track-card.playing .play-button').innerHTML = '<i class="fas fa-play"></i>';
+                    isPlaying = false;
+                } else {
+                    currentAudio.play();
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    document.querySelector('.track-card.playing .play-button').innerHTML = '<i class="fas fa-pause"></i>';
+                    isPlaying = true;
+                }
             });
 
-            // Add the keyframes dynamically
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeInUp {
-                    from {
-                        opacity: 0;
-                        transform: translateY(20px);
-                    }
-                    to {
-                        opacity: 1;
-                        transform: translateY(0);
-                    }
-                }
-            `;
-            document.head.appendChild(style);
+            // Progress bar interaction
+            progressBar.addEventListener('click', function (e) {
+                if (!currentAudio) return;
+                
+                const rect = progressBar.getBoundingClientRect();
+                const pos = (e.clientX - rect.left) / rect.width;
+                currentAudio.currentTime = pos * currentAudio.duration;
+            });
 
-            // Add active class to clicked sorting button
-            const sortButtons = document.querySelectorAll('.sort-btn');
-            sortButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    sortButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    // Here you would add logic to sort/filter the results
-                    // based on the selected button (Tracks, Playlists, Artists)
+            progressBar.addEventListener('mousedown', () => isDragging = true);
+            document.addEventListener('mouseup', () => isDragging = false);
+            
+            progressBar.addEventListener('mousemove', (e) => {
+                if (isDragging && currentAudio) {
+                    const rect = progressBar.getBoundingClientRect();
+                    const pos = Math.min(Math.max((e.clientX - rect.left) / rect.width,0), 1);
+                    currentAudio.currentTime = pos * currentAudio.duration;
+                    progress.style.width = `${pos * 100}%`;
+                    currentTimeEl.textContent = formatTime(currentAudio.currentTime);
+                }
+            });
+
+            // Track card interaction
+            document.querySelectorAll('.track-card').forEach(card => {
+                const playBtn = card.querySelector('.play-button');
+
+                // Play button click
+                playBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    playTrack(card);
                 });
+
+                // Card click
+                card.addEventListener('click', function () {
+                    playTrack(card);
+                });
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.code === 'Space' && currentAudio) {
+                    e.preventDefault();
+                    playPauseBtn.click();
+                }
             });
         });
     </script>
 </body>
-
 </html>

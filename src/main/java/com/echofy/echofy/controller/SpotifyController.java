@@ -100,37 +100,51 @@ public class SpotifyController {
     }
 
     @GetMapping("/search")
-    public String searchTracks(@RequestParam("query") String query, HttpSession session, Model model) {
-        String token = (String) session.getAttribute("access_token");
+public String searchTracks(@RequestParam("query") String query,
+                           @RequestParam(name = "sort", required = false) String sort,
+                           HttpSession session, Model model) {
 
-        if (token == null) {
-            return "redirect:/login";
-        }
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        String url = UriComponentsBuilder
-                .fromHttpUrl("https://api.spotify.com/v1/search")
-                .queryParam("q", query)
-                .queryParam("type", "track")
-                .queryParam("limit", 10)
-                .build().toUriString();
-
-        try {
-            Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
-            Map<String, Object> tracks = (Map<String, Object>) response.get("tracks");
-
-            model.addAttribute("tracks", tracks.get("items"));
-            model.addAttribute("query", query);
-
-            return "search-results";
-        } catch (Exception e) {
-            return "redirect:/?error=search";
-        }
+    String token = (String) session.getAttribute("access_token");
+    if (token == null) {
+        return "redirect:/login";
     }
+
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setBearerAuth(token);
+    HttpEntity<String> entity = new HttpEntity<>(headers);
+
+    String url = UriComponentsBuilder
+            .fromHttpUrl("https://api.spotify.com/v1/search")
+            .queryParam("q", query)
+            .queryParam("type", "track")
+            .queryParam("limit", 30)
+            .build().toUriString();
+
+    try {
+        Map<String, Object> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class).getBody();
+        Map<String, Object> tracksMap = (Map<String, Object>) response.get("tracks");
+        List<Map<String, Object>> trackItems = (List<Map<String, Object>>) tracksMap.get("items");
+
+        // ✅ Sorting berdasarkan popularity
+        if ("popularityDesc".equals(sort)) {
+            trackItems.sort((t1, t2) -> ((Integer) t2.get("popularity")).compareTo((Integer) t1.get("popularity")));
+        } else if ("popularityAsc".equals(sort)) {
+            trackItems.sort((t1, t2) -> ((Integer) t1.get("popularity")).compareTo((Integer) t2.get("popularity")));
+        }
+
+        model.addAttribute("tracks", trackItems);
+        model.addAttribute("query", query);
+        model.addAttribute("sort", sort);
+
+        return "search-results";
+
+    } catch (Exception e) {
+        model.addAttribute("errorMessage", "Terjadi kesalahan saat mengambil hasil pencarian.");
+        return "search-results";
+    }
+}
+
 
     @GetMapping("/top-tracks")
     public String topTracks(HttpSession session, Model model) {

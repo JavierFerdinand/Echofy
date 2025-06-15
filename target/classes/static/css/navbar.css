@@ -1,0 +1,186 @@
+ Search Bar Styling */
+    .search-input {
+      width: 100%;
+      padding: 8px 40px 8px 16px;
+      border-radius: 20px;
+      border: none;
+      background-color: #242424;
+      color: white;
+      font-size: 0.875rem;
+    }
+
+    .search-input::placeholder {
+      color: #a7a7a7;
+    }
+
+    .search-input:focus {
+      background-color: #2a2a2a;
+      color: white;
+      outline: none;
+      border: 1px solid #1db954;
+      /* garis hijau Spotify */
+      box-shadow: 0 0 0 2px ;
+      /* efek glow hijau lembut */
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color:white;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Upgrade Button */
+    .btn-upgrade {
+      border: 1px solid #878787;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-upgrade:hover {
+      border-color: white;
+      transform: scale(1.03);
+    }
+
+    /* Profile Dropdown */
+    .profile-btn {
+      transition: all 0.2s ease;
+      border-radius: 23px;
+      padding: 2px;
+    }
+
+    .profile-btn:hover {
+      background-color: #282828 !important;
+    }
+
+    .profile-avatar {
+      transition: transform 0.2s ease;
+    }
+
+    .profile-btn:hover .profile-avatar {
+      transform: scale(1.05);
+    }
+
+    .profile-name {
+      font-weight: 500;
+      font-size: 0.875rem;
+    }
+
+    .profile-arrow {
+      font-size: 0.75rem;
+      transition: transform 0.2s ease;
+    }
+
+    .profile-dropdown-container:hover .profile-arrow {
+      transform: rotate(180deg);
+    }
+
+    .profile-dropdown-content {
+      animation: fadeIn 0.2s ease;
+    }
+
+    .profile-dropdown-container:hover .profile-dropdown-content {
+      display: block !important;
+    }
+
+    .dropdown-item {
+      border-radius: 4px;
+      padding: 6px 8px;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-item:hover {
+      background-color: #3e3e3e;
+      color: white !important;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* CSS untuk search bar baru */
+  .search-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 48px 10px 20px;
+    border-radius: 500px; /* Bentuk bulat sempurna */
+    border: none;
+    background-color: #242424;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 400;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 48px;
+  }
+
+  .search-input::placeholder {
+    color: #a7a7a7;
+    opacity: 0.9;
+    font-weight: 400;
+  }
+
+  .search-input:focus {
+    background-color: #2a2a2a;
+    outline: none;
+    box-shadow: 0 0 0 2px #1db954;
+  }
+
+  .search-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #a7a7a7;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .search-input:focus + .search-btn {
+    color: white;
+  }
+
+  /* Efek hover untuk tombol search */
+  .search-btn:hover {
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  /* Animasi ketika focus */
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(29, 185, 84, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
+  }
+
+  .search-input:focus {
+    animation: pulse 1.5s infinite;
+  }
