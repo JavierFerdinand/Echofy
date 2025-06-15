@@ -1,24 +1,172 @@
-.button-group {
+.sidebar-container {
+  width: 260px;
+  height: calc(93vh - 60px);
+  position: relative; /* ini penting */
+  top: auto;
+  left: auto;
+  margin: 0;
+  padding: 24px 16px;
+  background-color: #121212;
+  overflow-y: auto;
   display: flex;
-  gap: 8px;
-  margin-top: 10px;
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+
+.nav-list {
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 24px;
+}
+
+.nav-item {
+    margin-bottom: 4px;
+}
+
+.nav-item.active {
+    background-color: #282828;
+    border-radius: 4px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #b3b3b3;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.nav-item.active .nav-link,
+.nav-link:hover {
+    color: white;
+}
+
+.nav-link i {
+    margin-right: 16px;
+    font-size: 20px;
+}
+
+.library-header {
+    padding: 4px 8px;
+}
+
+.library-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+}
+
+.playlist-filters {
+    display: flex;
+    gap: 16px;
+    font-size: 14px;
+    color: #b3b3b3;
+    margin-top: 12px;
+    padding: 4px 8px;
+}
+
+.filter-item {
+    cursor: pointer;
+    padding-bottom: 2px;
+}
+
+.filter-item.active {
+    color: white;
+    font-weight: 700;
+    border-bottom: 2px solid #1db954;
+}
+
+.playlist-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 8px;
+    padding: 0 8px;
+}
+
+.playlist-item {
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.playlist-item:hover {
+    background-color: #282828;
+}
+
+.playlist-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.playlist-meta {
+    font-size: 12px;
+    color: #b3b3b3;
+    opacity: 0.8;
+}
+
+.liked-songs-section:hover {
+    transform: translateY(-2px);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.card-text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+/* Scrollbar */
+.sidebar-container::-webkit-scrollbar,
+.playlist-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb,
+.playlist-list::-webkit-scrollbar-thumb {
+    background: #535353;
+    border-radius: 4px;
+}
+
+.sidebar-container::-webkit-scrollbar-track,
+.playlist-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-container:hover {
+  box-shadow: 0 0 20px #FAEBD7;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 /* Tombol ala Spotify */
 .pill-btn {
-  all: unset; /* Reset semua gaya default button */
-  display: inline-block;
-  background-color: #2a2a2a;
-  color: white;
-  border-radius: 999px;
-  padding: 6px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  text-align: center;
+    all: unset;
+    /* Reset semua gaya default button */
+    display: inline-block;
+    background-color: #2a2a2a;
+    color: white;
+    border-radius: 999px;
+    padding: 6px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
 }
 
 .pill-btn:hover {
-  background-color: #3a3a3a;
+    background-color: #3a3a3a;
 }

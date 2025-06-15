@@ -1,0 +1,632 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #000;
+    color: white;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Layout Structure */
+.app-container {
+    display: flex;
+    background-color: black;
+    padding: 16px;
+    margin-top: 60px;
+    /* jarak dari navbar */
+    gap: 24px;
+    align-items: flex-start;
+    /* Space for navbar */
+}
+
+
+.main-content {
+    flex: 1;
+    overflow-y: scroll;
+    height: calc(93vh - 60px);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 80px;
+    background: linear-gradient(180deg, #1F1F1F 0%, #121212 100%);
+    position: relative;
+    z-index: 1;
+    margin-left: 0;
+    border-radius: 12px;
+    background: #121212;
+    padding: 24px;
+    box-shadow: 0 0 12px #00000088;
+
+}
+
+/* Navbar styling */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background-color: #000000 !important;
+    height: 60px;
+}
+
+/* Hide scrollbars */
+body::-webkit-scrollbar,
+.main-content::-webkit-scrollbar,
+.album-scroll-container::-webkit-scrollbar,
+.sidebar-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Rest of your existing styles... */
+.song-container {
+    background-color: #181818;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.song-container:hover {
+    background-color: #282828;
+}
+
+.song-cover {
+    width: 56px;
+    height: 56px;
+    border-radius: 4px;
+    object-fit: cover;
+    margin-right: 16px;
+}
+
+.song-info {
+    flex-grow: 1;
+}
+
+.song-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    color: white;
+}
+
+.song-artist {
+    font-size: 0.875rem;
+    color: #b3b3b3;
+}
+
+.song-duration {
+    font-size: 0.875rem;
+    color: #b3b3b3;
+    margin-left: 16px;
+}
+
+.card {
+    background-color: #181818;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+    border: none;
+    padding: 16px;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    background-color: #282828;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.card-text {
+    font-size: 0.8rem;
+    color: #b3b3b3;
+    margin-bottom: 0;
+}
+
+.new-releases {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.album-scroll-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 10px;
+}
+
+.album-scroll-track {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.album-card {
+    flex-shrink: 0;
+    width: 160px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.card-img-top {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.card-body {
+    padding: 0;
+}
+
+.no-cover {
+    height: 160px;
+    background-color: #343a40;
+    border-radius: 4px;
+    color: #adb5bd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+}
+
+.text-truncate-2-lines {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.album-card .card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: transparent;
+    padding: 0;
+}
+
+.library-section {
+    margin-top: 24px;
+}
+
+.library-section h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #b3b3b3;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.library-item {
+    color: #b3b3b3;
+    font-weight: 600;
+    margin-bottom: 8px;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.library-item:hover {
+    color: white;
+}
+
+.playlist-item {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    padding: 4px 0;
+    cursor: pointer;
+}
+
+.playlist-item:hover {
+    color: white;
+}
+
+.nav-link.active {
+    color: white;
+}
+
+.divider {
+    border-top: 1px solid #282828;
+    margin: 16px 0;
+}
+
+.spotify-logo {
+    width: 130px;
+    margin-bottom: 24px;
+    padding: 0 16px;
+}
+
+.user-greeting {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 32px;
+
+}
+
+.artist-mix-card {
+    background: linear-gradient(135deg, #2e2e2e, #1e1e1e);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.artist-mix-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.artist-mix-item {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: #b3b3b3;
+}
+
+.artist-mix-item:hover {
+    color: white;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.footer-text {
+    font-size: 0.8rem;
+    color: #b3b3b3;
+    margin-top: 24px;
+    padding: 0 16px;
+}
+
+.playlist-section {
+    margin-top: 32px;
+}
+
+.playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.song-list {
+    margin-top: 24px;
+}
+
+.song-list-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr 100px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #adb5bd;
+    color: #b3b3b3;
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+}
+
+.song-list-header div {
+    padding: 0 8px;
+}
+
+/* Team Footer Styles */
+.team-footer {
+    background-color: #181818;
+    border-top: 1px solid #282828;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+.team-member-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.team-member-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #282828;
+    display: flex;
+    align-items: center;
+}
+
+.team-member-list li:last-child {
+    border-bottom: none;
+}
+
+.member-number {
+    color: #1DB954;
+    font-weight: bold;
+    margin-right: 1rem;
+    width: 1.5rem;
+    text-align: right;
+}
+
+.member-name {
+    color: white;
+    flex-grow: 1;
+}
+
+.footer-heading {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.footer-copyright {
+    color: #b3b3b3;
+    font-size: 0.875rem;
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #282828;
+}
+
+/* New styles for team member social icons */
+.member-social {
+    display: flex;
+    gap: 0.75rem;
+    margin-left: auto;
+}
+
+.member-social a {
+    color: #b3b3b3;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.member-social a:hover {
+    color: #1DB954;
+    transform: scale(1.1);
+    text-decoration: none;
+}
+
+.member-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+.about-project {
+    color: #b3b3b3;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.project-social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.project-social-links a {
+    color: #b3b3b3;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.project-social-links a:hover {
+    color: #1DB954;
+    transform: scale(1.1);
+}
+
+/* Recently Played Section Styles */
+.recently-played {
+    margin-bottom: 3rem;
+}
+
+.recently-played .album-scroll-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 15px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.recently-played .album-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.recently-played .album-scroll-track {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
+    padding-bottom: 5px;
+}
+
+.recently-played .album-card {
+    flex: 0 0 auto;
+    width: 160px;
+}
+
+.recently-played .card {
+    background-color: #181818;
+    transition: all 0.3s ease;
+    height: 100%;
+    border-radius: 8px;
+    padding: 0;
+}
+
+.recently-played .card:hover {
+    background-color: #282828;
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.recently-played .card-img-top {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.recently-played .card-body {
+    padding: 0 8px 16px 8px;
+}
+
+.recently-played .card-title {
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recently-played .card-text {
+    font-size: 0.8rem;
+    color: #b3b3b3;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recently-played-time {
+    font-size: 0.75rem;
+    color: #b3b3b3;
+    opacity: 0.8;
+}
+
+.recently-played .no-cover {
+    height: 160px;
+    background-color: #282828;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.recently-played .no-cover i {
+    font-size: 2rem;
+    color: #535353;
+}
+
+/* --- MODAL TAMBAH PLAYLIST STYLE --- */
+/* ========== SPOTIFY MODAL STYLES ========== */
+.spotify-modal {
+    background-color: #282828;
+    border: 1px solid #404040;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.spotify-modal-header {
+    border-bottom: 1px solid #404040;
+    padding: 20px 24px;
+}
+
+.spotify-modal-footer {
+    border-top: 1px solid #404040;
+    padding: 16px 24px;
+}
+
+.text-white-80 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.text-spotify-green {
+    color: #1DB954;
+}
+
+.spotify-input {
+    background-color: #121212;
+    border: 1px solid #404040;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.spotify-input:focus {
+    background-color: #121212;
+    color: white;
+    border-color: #1DB954;
+    box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.2);
+}
+
+.spotify-input::placeholder {
+    color: #535353;
+}
+
+.spotify-switch {
+    width: 48px;
+    height: 24px;
+    background-color: #535353;
+    border: none;
+}
+
+.spotify-switch:checked {
+    background-color: #1DB954;
+}
+
+.spotify-file-input {
+    position: relative;
+    border: 2px dashed #404040;
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.spotify-file-input:hover {
+    border-color: #535353;
+}
+
+.file-input-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.btn-spotify-green {
+    background-color: #1DB954;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-spotify-green:hover {
+    background-color: #1ED760;
+    transform: scale(1.02);
+}
+
+.spotify-btn-cancel {
+    border: 1px solid #727272;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.spotify-btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #a0a0a0;
+}
+
+/* ========== END SPOTIFY MODAL STYLES ========== */
